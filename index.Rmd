@@ -8,18 +8,15 @@ author:
 date: "`r Sys.Date()`"
 description: |
   An Introduction to Data Science
-site: distill::distill_website
+# site: distill::distill_website
+
 ---
-
-
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
-+ Facilitator: 	Sergio Uribe, PhD, DDS. 	
 + Contact: 	sergio.uribe@rsu.lv
 + Language:	English
 + Target audience:	Doctoral and Master Students
