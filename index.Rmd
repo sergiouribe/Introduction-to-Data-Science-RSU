@@ -9,7 +9,7 @@ date: "`r Sys.Date()`"
 description: |
   An Introduction to Data Science
 # site: distill::distill_website
-layout: Tactile
+layout: default
 ---
 
 ```{r setup, include=FALSE}
