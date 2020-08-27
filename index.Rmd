@@ -126,7 +126,6 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
  + [Dental Data Science](https://dentaldatascience.org/)
  + [Tidyverse.org](https://www.tidyverse.org/)
  + Data Sciences courses from [Coursera](https://www.coursera.org/browse/data-science) and [EdX](https://www.edx.org/course/subject/data-science)
- + Several free books at [Bookdown](https://bookdown.org/home/archive/)
  + [Ten Tidyverse tricks](https://www.youtube.com/watch?v=NDHSBUN_rVU) 
  + [The Lesser Known Stars of the Tidyverse](https://www.youtube.com/watch?v=ax4LXQ5t38k) 
  + [Tidyverse tips in R ](https://www.youtube.com/watch?v=ZM04jn95YP0)
