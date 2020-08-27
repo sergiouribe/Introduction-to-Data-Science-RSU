@@ -5,7 +5,7 @@ author:
   url: https://sergiouribe.github.io/Introduction-to-Data-Science-RSU/
   affiliation: Riga Stradins University
   affiliation_url: https://www.rsu.lv
-date: "`r Sys.Date()`"
+# date: "`r Sys.Date()`"
 description: |
   An Introduction to Data Science
 # site: distill::distill_website
