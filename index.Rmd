@@ -2,14 +2,14 @@
 title: "Mastering your Data - from Exploration to Visualization"
 author:
 - name: Sergio Uribe. PhD, DDS
-  url: ....
+  url: https://sergiouribe.github.io/Introduction-to-Data-Science-RSU/
   affiliation: Riga Stradins University
   affiliation_url: https://www.rsu.lv
 date: "`r Sys.Date()`"
 description: |
   An Introduction to Data Science
 # site: distill::distill_website
-
+layout: Tactile
 ---
 
 ```{r setup, include=FALSE}
