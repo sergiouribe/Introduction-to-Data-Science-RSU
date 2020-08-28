@@ -16,7 +16,7 @@ layout: default
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-![](./figs/graph2.jpg)
+![](./figs/graph3.png)
 
 + Contact: 	sergio.uribe@rsu.lv
 + Language:	English
