@@ -16,12 +16,14 @@ layout: default
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+![](./figs/graphs.png)
 
 + Contact: 	sergio.uribe@rsu.lv
 + Language:	English
 + Target audience:	Doctoral and Master Students
 + Place: 		Dzirciema iela 16, Rīga, LV-1007 Senāta zāle
 + Course materials:	https://github.com/sergiouribe/Introduction-to-Data-Science-RSU
+
 
 
 ## OBJECTIVE
