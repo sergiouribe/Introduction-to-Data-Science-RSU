@@ -2,7 +2,6 @@
 
 # Mastering your Data - from Exploration to Visualization
 + Facilitator: 	Sergio Uribe, PhD, DDS. 	
-+ Contact: 	sergio.uribe@rsu.lv
 + Language:	English
 + Target audience:	Doctoral and Master Students
 + Place: 		Dzirciema iela 16, Rīga, LV-1007 Senāta zāle
