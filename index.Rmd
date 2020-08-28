@@ -116,6 +116,7 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
 ### Data Science Books (required some chapters)
 + Healy, K., 2018. [Data Visualization: A Practical Introduction](https://socviz.co/), 1 edition. Ed. Princeton University Press.
 + Wickham, H., Grolemund, G. [R for Data Science: Import, Tidy, Transform, Visualize, and Model Data](https://r4ds.had.co.nz/), Edición: 1. ed. O’Reilly Media.
++ [Book selection about R](https://www.bigbookofr.com/)
 
 
 ### Communities, Blogs and Q&A (recommended)
