@@ -16,7 +16,7 @@ layout: default
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-![](./figs/graph3.png)
+![](./Figs/graph3.png)
 
 + Contact: 	sergio.uribe@rsu.lv
 + Language:	English
@@ -85,7 +85,7 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
     ```{r echo=TRUE, eval = FALSE}
     install.packages(c("tidyverse", "gtsummary", 
       			             "janitor", "ggpubr", 
-                       "ggthemes", "naniar", "NHANES"))
+                       "ggthemes", "naniar", "NHANES", "gapminder"))
 
     ```
     
