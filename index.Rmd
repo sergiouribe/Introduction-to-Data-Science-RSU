@@ -109,6 +109,7 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
 + Vickers, A.J., Assel, M.J., Sjoberg, D.D., Qin, R., Zhao, Z., Koyama, T., Botchway, A., Wang, X., Huo, D., Kattan, M., Zabor, E.C., Harrell, F., 2020. [Guidelines for Reporting of Figures and Tables for Clinical Research in Urology.](https://www.sciencedirect.com/science/article/pii/S030228382030316X) Eur. Urol. doi:10.1016/j.eururo.2020.04.048
 + [Tidy Data](https://www.jstatsoft.org/article/view/v059i10) | Wickham | Journal of Statistical Software [WWW Document], n.d.
 + Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., Teal, T.K., 2017. [Good enough practices in scientific computing.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) PLoS Comput. Biol. 13, e1005510.
++ Rost, Lisa. 2020. [Colors for data visualization](https://blog.datawrapper.de/colors/) and [How to pick more beautiful colors for your data visualizations](https://blog.datawrapper.de/beautifulcolors/)
 
 ### Recommended
 
