@@ -119,6 +119,7 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
 
 #### Tutorial (recommended)
  + [What is GitHub](https://guides.github.com/activities/hello-world/)  
+ + [Rstudio interface](https://www.pipinghotdata.com/posts/2020-09-07-introducing-the-rstudio-ide-and-r-markdown/)
 
 ### Data Science Books (required some chapters)
 + Healy, K., 2018. [Data Visualization: A Practical Introduction](https://socviz.co/), 1 edition. Ed. Princeton University Press.
