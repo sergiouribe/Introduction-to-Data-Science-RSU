@@ -2,6 +2,15 @@
 title: "Introduction to Exploratory Data Analysis"
 output: html_notebook
 ---
+
+#################################
+########## PENDING ##############
+#################################
+
+
+
+# Introduction to Exploratory Data Analysis
+
 ## Welcome
 
 This tutorial will show you how to explore your data in a systematic way, a task that statisticians call **exploratory data analysis**, or **EDA** for short. In the tutorial you will:
@@ -10,7 +19,6 @@ This tutorial will show you how to explore your data in a systematic way, a task
 * Practice finding patterns in data
 * Get tips about how to use different types of plots to explore data
 
-The tutorial is excerpted from _R for Data Science_ by Hadley Wickham and Garrett Grolemund, published by O’Reilly Media, Inc., 2016, ISBN: 9781491910399. You can purchase the book at [shop.oreilly.com](http://shop.oreilly.com/product/0636920034407.do).
 
 ## Exploratory Data Analysis
 
@@ -20,7 +28,7 @@ EDA is an iterative cycle that helps you understand what your data says. When yo
 
 1. Generate questions about your data
 
-1. Search for answers by visualising, transforming, and/or modeling your data
+1. Search for answers by visualizing, transforming, and/or modeling your data
 
 1. Use what you learn to refine your questions and/or generate new questions
 
@@ -29,6 +37,9 @@ EDA is an important part of any data analysis. You can use EDA to make discoveri
 ### The EDA mindset
 
 EDA is not a formal process with a strict set of rules. More than anything, EDA is a state of mind. During the initial phases of EDA, you should feel free to investigate every idea that occurs to you. Some of these ideas will pan out, and some will be dead ends. As your exploration continues, you will home in on lines of inquiry that reveal insights worth writing up and communicating to others.
+
+Exploratory data analysis is for myself
+
 
 ### Questions
 
@@ -64,7 +75,7 @@ The rest of this tutorial will look at these two questions. To make the discussi
 
 *   __Tabular data__ is a table of values, each associated with a variable and an observation. Tabular data is __tidy__ if each value is placed in its own cell, each variable in its own column, and each observation in its own row. 
     
-    So far, all of the data that you've seen has been tidy. In real-life, most data isn't tidy, so we'll come back to these ideas again in [Data Wrangling]().
+    So far, all of the data that you've seen has been tidy. In real-life, most data isn't tidy, so we'll come back to these ideas again in __Data Wrangling__.
     
 ### Review 1 - Discovery or Confirmation?
 
