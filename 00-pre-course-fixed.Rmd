@@ -1,0 +1,26 @@
+---
+title: "Getting Started with Data in R"
+output: html_notebook
+---
+
+# Getting Started with Data in R {#getting-started}
+
+
+
+Before we can start exploring data in R, there are some key concepts to understand first:
+
+1. What are R and RStudio?
+How do I code in R?
+3. What are R packages?
+
+We'll introduce these concepts in the upcoming Sections. 
+
+
+
+## What are R and RStudio? {#r-rstudio}
+
+Throughout this book, we will assume that you are using R via RStudio. First time users often confuse the two. At its simplest, R is like a car's engine while RStudio is like a car's dashboard as illustrated here.
+
+![https://d33wubrfki0l68.cloudfront.net/0b4d0569b2ddf6147da90b110fbb2a17653c8b08/f06f3/images/shutterstock/r_vs_rstudio_1.png]()
+
+More precisely, R is a programming language that runs computations, while RStudio is an *integrated development environment (IDE)* that provides an interface by adding many convenient features and tools. So just as the way of having access to a speedometer, rearview mirrors, and a navigation system makes driving much easier, using RStudio's interface makes using R much easier as well. 

@@ -1,0 +1,33 @@
+---
+title: "Sleep"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+```{r}
+data("sleep")
+```
+```{r}
+head(sleep)
+```
+```{r}
+glimpse(sleep)
+```
+```{r}
+sleep %>% 
+  ggplot(aes(x = group, 
+             y = extra)) + 
+  geom_point() + 
+  geom_line(aes(group = ID))
+```
+```{r}
+sleep %>% 
+  ggplot(aes(x = group, 
+             y = extra)) + 
+  geom_boxplot() + 
+  geom_point(alpha = .2) + 
+  geom_line(aes(group = ID), alpha = .3)
+```
+
