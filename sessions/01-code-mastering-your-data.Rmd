@@ -1,0 +1,39 @@
+---
+title: "01 Code"
+output: html_notebook
+---
+
+# Packages
+```{r}
+# install.packages("pacman") # this is a package that allows to manage other packages
+library(pacman)
+```
+
+```{r}
+pacman::p_load(tidyverse, 
+               gtsummary, 
+               janitor, 
+               ggpubr, 
+               naniar, 
+               NHANES, 
+               palmerpenguins, 
+               gapminder, 
+               coronavirus)
+```
+
+
+```{r examples of package use}
+# this
+new_data <- readr::read_csv("my_data.csv")
+# is equivalent with this
+new_data <- read_csv("my_data.csv")
+```
+
+
+
+
+
+# Data importation
+## From web via Google Sheets
+
+

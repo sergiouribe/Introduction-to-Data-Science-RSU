@@ -3,10 +3,6 @@ title: "Introduction to Exploratory Data Analysis"
 output: html_notebook
 ---
 
-#################################
-########## PENDING ##############
-#################################
-
 
 
 # Introduction to Exploratory Data Analysis
@@ -19,8 +15,35 @@ This tutorial will show you how to explore your data in a systematic way, a task
 * Practice finding patterns in data
 * Get tips about how to use different types of plots to explore data
 
+## The Data Science context
+
+> Data science is the process of formulating a quantitative question that can be answered with data, collecting and cleaning the data, analyzing the data, and communicating the answer to the question to a relevant audience.
+
+
+In general the data science process is iterative and the different components blend together a little bit. But for simplicity lets discretize the tasks into the following 7 steps:
+
+
+1. Define the question of interest
+1. Get the data
+1. Clean the data
+1. Explore the data
+1. Fit statistical models
+1. Communicate the results
+1. Make your analysis reproducible
+
+The main characteristic of good data science is: 
+
+> Good data science is distinguished from bad data science primarily by a repeatable, thoughtful, skeptical application of an analytic process to data in order to arrive at supportable conclusions. (Jeff Leek)
+
+
+In these sessions we will explore one of the main tools for data analysis, _the R statistical program_,  and a package or set of utilities, specific to datascience, the _tidyverse package_
+
+One might be tempted to start analyzing a dataset using complex statistical models that are then difficult to interpret because one is not familiar with the data. Also, there is a great interest in the result of a particular statistical test or level of significance rather than in the evaluation of the process that allowed a certain test to be performed. This makes many researchers delegate the task of analysis to a statistician, without being familiar with the data. 
+
+![](../Figs/stats-pipeline.jpg)
 
 ## Exploratory Data Analysis
+![](../Figs/questions.png)
 
 ### What is EDA?
 
@@ -34,11 +57,15 @@ EDA is an iterative cycle that helps you understand what your data says. When yo
 
 EDA is an important part of any data analysis. You can use EDA to make discoveries about the world; or you can use EDA to ensure the quality of your data, asking questions about whether the data meets your standards or not.
 
+An exploratory data analysis focus on searching for discoveries, trends, correlations, or relationships between the measurements of multiple variables to generate ideas or hypotheses. 
+
+
 ### The EDA mindset
 
 EDA is not a formal process with a strict set of rules. More than anything, EDA is a state of mind. During the initial phases of EDA, you should feel free to investigate every idea that occurs to you. Some of these ideas will pan out, and some will be dead ends. As your exploration continues, you will home in on lines of inquiry that reveal insights worth writing up and communicating to others.
 
-Exploratory data analysis is for myself
+> Exploratory data analysis is for myself, inferential is to convince others
+
 
 
 ### Questions
