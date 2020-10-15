@@ -1,0 +1,148 @@
+---
+title: "First class"
+output: html_notebook
+---
+
+
+# Packages
+
+```{r}
+
+pacman::p_load(tidyverse, 
+               palmerpenguins)
+
+```
+
+
+# Dataset
+Now I will open the penguins dataset
+
+```{r}
+data(penguins)
+```
+
+
+# Explore
+```{r}
+View(penguins)
+```
+
+
+```{r}
+dim(penguins)
+```
+
+```{r}
+head(penguins)
+```
+
+
+```{r}
+tail(penguins)
+```
+
+```{r}
+str(penguins)
+```
+```{r}
+glimpse(penguins)
+```
+
+```{r}
+summary(penguins)
+```
+```{r}
+class(penguins$year)
+```
+```{r}
+penguins$year <- as.factor(penguins$year)
+```
+
+
+
+```{r}
+summary(penguins$year)
+```
+```{r}
+penguins %>% 
+  ggplot()
+```
+
+```{r}
+penguins %>%
+  drop_na() %>%  
+  ggplot(aes(x = bill_length_mm, 
+             y = flipper_length_mm)) +
+  geom_point() +
+  aes(color = species) +
+  theme_minimal()
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = flipper_length_mm, 
+             color = species, 
+             size = body_mass_g)) + 
+  geom_point(alpha  = .5)
+```
+
+
+
+Elina ask me: are differences of body mass between sexes?
+
+```{r}
+penguins %>%                                              # this is the data
+  drop_na() %>%                                           # leave the na out
+  ggplot(aes(x = species,                                  # the x variable
+             y = body_mass_g)) +
+  geom_boxplot() +
+  aes(fill = sex) +
+  labs(
+    title = "Boxplot of boddy mass by species and sex", 
+    subtitle = "Data from Palmer Penguins", 
+    y = "Body mass (g)", 
+    x = "Species", 
+    color = "Sex"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+ggplot(data = penguins)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

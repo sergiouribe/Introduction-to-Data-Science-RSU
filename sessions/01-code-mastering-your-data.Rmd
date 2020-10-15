@@ -3,16 +3,40 @@ title: "01 Code"
 output: html_notebook
 ---
 
+# Rmarkdown basics
+
+ This is text, **bold** and *italics*
+A line.  
+A new line.  
+
+ + first item
+ + second item
+ 
+ ## Second Header
+ Some text
+ 
+ ### Third header
+ 
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+# Use include=TRUE for the chunks to be displayed
+```
+
+
 # Packages
-```{r}
+```{r message=FALSE, warning=FALSE, echo=T}
 # install.packages("pacman") # this is a package that allows to manage other packages
 library(pacman)
 ```
 
-```{r}
+```{r, message=FALSE, echo=FALSE, results='hide', warning=FALSE}
 pacman::p_load(tidyverse, 
                gtsummary, 
                janitor, 
+               visdat, 
                ggpubr, 
                naniar, 
                NHANES, 
@@ -22,18 +46,682 @@ pacman::p_load(tidyverse,
 ```
 
 
-```{r examples of package use}
-# this
-new_data <- readr::read_csv("my_data.csv")
-# is equivalent with this
-new_data <- read_csv("my_data.csv")
+# Some general information
+
+ + Use of panels, console, rmarkdown, environment (grid, list)
+ + Use of index
+ + Maintain your environment as clean as possible
+ + write clear code: CTRL + SHIFT + A
+ + use comments, talk to yourself in the future!
+ + case matters
+ 
+```{r}
+x <- c(1:20) 
+```
+take care of how you write
+
+this
+```{r}
+x
+```
+is different from this
+```{r}
+X
+```
+
+Also this work
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram()
+```
+
+But this don't. Can you find the mistake?
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g) + 
+  geom_histogram()
+```
+
+
+ + use of packages notation: 
+
+this
+
+> new_data <- readr::read_csv("my_data.csv")
+
+is equivalent with this
+
+>  new_data <- read_csv("my_data.csv")
+
+ + shortcuts: 
+  + CTRL +  ALT + I for chunks
+  + CRTL + SHIFT + M for %>% 
+  + ALT + - for <- operator assignment
+
+# Best strategy to avoid dirty data
+
+__Clean Data Workflow__
++ Validate data entry
++ Separate Data Entry from EDA and Modeling
++ Coding and naming conventions
+
+
+# THING TO KEEP IN MIND
+
+> Garbage in, garbage out!
+
+Two rules of data analysis:  
+ 1. Don't touch your data
+ 2. Remember the first rule of data analysis
+
+# Data importation
+
+## From web via Google Sheets
+
+```{r}
+dirty_data <- readr::read_csv("http://bit.ly/dirty-data-rsu")
+```
+
+## From folders
+
+Use exploration and check file type
+
+# Data cleaning with janitor
+
+```{r}
+head(dirty_data)
+```
+```{r}
+names(dirty_data)
+```
+
+
+# Data exploration
+
+## Load NHANES dataset
+```{r dataset NHANES}
+data("NHANES")
+```
+
+
+```{r head NHANES}
+head(NHANES)
+```
+
+
+```{r View NHANES}
+View(NHANES)
+```
+
+```{r dim NHANES}
+dim(NHANES)
+```
+```{r glimpse NHANES}
+glimpse(NHANES)
+```
+
+```{r structure NHANES}
+str(NHANES)
+```
+
+
+```{r summary NHANES}
+summary(NHANES)
+```
+
+
+### Basic tables
+```{r one table NHANES}
+table(NHANES$Gender)
+```
+```{r 2x2 table NHANES}
+table(NHANES$Gender, NHANES$Race1)
+```
+
+```{r tabyl 1}
+NHANES %>% 
+  janitor::tabyl(Gender) 
+```
+
+
+```{r tabyl adorn percentage}
+NHANES %>% 
+  janitor::tabyl(Gender) %>% 
+  janitor::adorn_pct_formatting()
+```
+
+EXERCISE
+tabyl Gender vs SmokeNow
+
+
+```{r}
+NHANES %>% 
+  janitor::tabyl(Gender, SmokeNow) 
 ```
 
 
 
 
+Seems that the NAs could be an issue
 
-# Data importation
-## From web via Google Sheets
 
+## Visualize NA data
+
+### With naniar package
+
+```{r n::vis_miss}
+naniar::vis_miss(NHANES)
+```
+```{r n::gg_miss_var}
+naniar::gg_miss_var(NHANES)
+```
+Check by gender
+
+```{r}
+naniar::gg_miss_var(NHANES, facet = Gender)
+```
+EXERCISE
+
+check by 
+
+```{r}
+naniar::gg_miss_var(NHANES, facet = Gender)
+```
+
+
+
+```{r}
+NHANES %>% 
+  naniar::prop_miss_var()
+```
+
+
+
+```{r}
+dirty_data %>% 
+  ggplot(aes(x = P8Fat, 
+             y = RightHscw)) + 
+  geom_point() 
+```
+```{r}
+dirty_data %>% 
+  ggplot(aes(x = P8Fat, 
+             y = RightHscw)) + 
+  naniar::geom_miss_point() 
+```
+
+
+
+
+```{r check clean names}
+dirty_data %>% 
+  janitor::clean_names() %>% 
+  with(names(.))
+
+```
+
+# Data visualization
+
+The grammar of graphics (ggplot)
+
+To contruct a graph, we need  
+ - data: a dataframe in tidyformat
+ - some mapping to include aesthetics elements
+ - a geometric representation of the aesthetics elements
+ 
+The ggplot allows to manage those elements and adding to your graph as layers
+
+
+
+## With palmepenguins
+
+![Penguins!](https://allisonhorst.github.io/palmerpenguins/man/figures/lter_penguins.png)
+```{r}
+data(penguins)
+```
+
+### Data exploration: the basics
+
+```{r view penguins}
+View(penguins)
+```
+
+This is a **tidy** dataset in **wide** format. 
+
+Each column is a variable (factor), and each row is an observation.
+
+
+```{r head penguins}
+head(penguins) # this is a comment, here I can write anything. Is a good practice to comment all your code, to explain TO YOURSELF what you were thinking
+```
+```{r tail penguins}
+tail(penguins) # see the last 6 rows
+```
+```{r}
+dim(penguins) #see the dimensions
+```
+```{r str penguins}
+str(penguins) # see the structure of the dataframe (or dataset, is the same)
+```
+
+
+```{r glimpse penguins}
+glimpse(penguins) # the tidyverse version of str
+```
+
+
+Also we can check any variable individually with the $ operator
+
+dataframe $ variable
+
+
+```{r class penguins 1}
+class(penguins$species)
+```
+```{r class penguins 2}
+class(penguins$bill_length_mm)
+```
+```{r class penguins 3}
+class(penguins$year)
+```
+We can create a summary of all the dataframe
+```{r summary penguins}
+summary(penguins)
+```
+
+You can check individual variables 
+```{r summary penguins 2}
+summary(penguins$bill_depth_mm)
+```
+But you have to be careful about the nature of your variables!
+
+```{r summary penguins year as num}
+summary(penguins$year)
+```
+Let's convert year from num to factor
+
+```{r data conversion to factor}
+penguins$year <- as.factor(penguins$year)
+```
+
+```{r summary penguins year as factor}
+summary(penguins$year)
+```
+Check unique 
+
+```{r unique penguins}
+unique(penguins$island)
+```
+### Data exploration: visualizations
+
+What is a graph
+
+-  data
+- a mapping to aesthetic components: y, x, colors, shapes, sizes
+- a geom of this mappings
+
+Use of the pipe operator
+
+```{r}
+head(penguins)
+```
+
+```{r}
+penguins %>% 
+  head()
+```
+
+The grammar of graphics
+
+```{r}
+penguins %>% 
+  ggplot()
+```
+```{r}
+penguins %>%                                   # the data
+  ggplot(mapping = aes(x = flipper_length_mm,  # the x variable
+                       y = body_mass_g))       # the y variable
+
+```
+```{r}
+penguins %>%                                   # the data
+  ggplot(mapping = aes(x = flipper_length_mm,  # the x variable
+                       y = body_mass_g)) +      # the y variable
+  geom_point()                                 # the geometry of the mapping
+```
+```{r}
+penguins %>%                                   # the data
+  ggplot(mapping = aes(x = flipper_length_mm,  # the x variable
+                       y = body_mass_g,        # the y variable
+                       color = sex)) +         # another aesthetic
+  geom_point()                                 # the geometry of the mapping
+```
+```{r}
+penguins %>%                                   
+  ggplot(mapping = aes(x = flipper_length_mm,  
+                       y = body_mass_g,        
+                       color = sex, 
+                       )) +         # another aesthetic
+  geom_point()                                 # the geometry of the mapping
+```
+
+
+#### One variable
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram()
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 30)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = sex)) + 
+  geom_histogram(bins = 10)
+```
+
+Exercise: by species
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10)
+```
+Facetting
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10) + 
+  facet_wrap(~ species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10) + 
+  facet_grid(species ~ .)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10) + 
+  facet_grid(species ~ sex)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10) + 
+  facet_grid(sex ~ species)
+```
+
+Trasparency
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g,  
+               fill = species)) + 
+  geom_histogram(bins = 10)
+```
+
+
+#### Two variables
+
+##### Two continuos variables
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = body_mass_g,
+             color = sex)) + 
+  geom_point()
+
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = body_mass_g,
+             color = sex)) + 
+  geom_point() + 
+  theme_minimal()
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = body_mass_g,
+             color = sex)) + 
+  geom_point() + 
+  theme_minimal() + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = body_mass_g,
+             color = sex)) + 
+  geom_point() + 
+  theme_minimal() + 
+  facet_wrap(~species) + 
+  labs(title = "Flipper length and Body mass by Species and Sex", 
+       y = "Body Mass (k)", 
+       x = "Flipper length (mm)", 
+       color = "Sex")
+```
+
+
+Simpson Paradox
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point()
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", color = "gray50")
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm, 
+             color = species, 
+            shape = species)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", color = "gray50")
+```
+
+
+
+
+##### One continuos vs one discrete (factor or chr)
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = body_mass_g)) + 
+  geom_boxplot() + 
+  theme_minimal()
+```
+
+EXERCISE
+
+By island
+
+by sex
+
+by sex island  facet by species
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_boxplot()
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_boxplot() + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_violin() + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_violin() + 
+  geom_point() + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_violin() + 
+  geom_jitter() + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_violin() + 
+  geom_jitter(alpha = .3) + 
+  facet_wrap(~species)
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = island)) + 
+  geom_violin() + 
+  geom_jitter(alpha = .1) +
+  geom_boxplot(width = .2, alpha = .2) + 
+  theme_minimal()
+```
+
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = year, 
+             y = body_mass_g)) + 
+  geom_boxplot()
+```
+```{r}
+penguins %>% 
+  ggplot(aes(x = as.factor(year), 
+             y = body_mass_g)) + 
+  geom_boxplot()
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = as.factor(year), 
+             y = body_mass_g)) + 
+  geom_boxplot() + 
+  facet_wrap(~species)
+```
+
+
+
+### TREND
+
+
+
+
+
+
+
+# Gapminder dataset
+We will use the gapminder dataset
+
+```{r data(gapminder)}
+data("gapminder")
+```
+
+Check your **Environment**
+
+## Explore the data
+
+```{r view}
+View(gapminder)
+```
+
+```{r dime}
+dim(gapminder)
+```
+```{r head}
+head(gapminder)
+```
+```{r tail}
+tail(gapminder)
+```
+```{r glimpse}
+glimpse(gapminder)
+```
+```{r str }
+str(gapminder)
+```
+Here take some time exploring the nature of the dataframe variables. For example, if you have done a study in three cities, you must have a variable "city" with three levels only.
+
+```{r unique}
+unique(gapminder$country)
+```
+## Our first graph
+
+We need data
+
+```{r}
+gapminder
+```
+
+Create a subset
+```{r}
+gapminder_2002 <- gapminder %>% 
+  filter(year == 2002)
+```
+
+to create a graph we need data
+```{r}
+ggplot(data = gapminder_2002)
+```
+
+is the same as
+
+```{r}
+gapminder %>%  # this is the data
+  ggplot()
+
+```
+
+Them we need to map out the variables of interest
+In this case, we will explore the association between life expectancy (lifeExp) and the economy of the country (gdpPercap)
+```{r}
+ggplot(data = gapminder_2002) + 
+  
+
+```
 

@@ -31,6 +31,33 @@ RStudio Interface, Rmarkdown, Shortcuts
 library(tidyverse)
 ```
 
+
+Some general information
+======================================================
+
+ + Use of panels, console, rmarkdown, environment (grid, list)
+ + Maintain your environment as clean as possible
+ + write clear code: CTRL + SHIFT + A
+ + use comments, talk to yourself in the future!
+ + case matters
+ 
+```{r, include=T, echo=TRUE}
+x <- c(1:20) 
+X
+```
+ + use of packages notation: 
+
+this
+> new_data <- readr::read_csv("my_data.csv")
+
+ is equivalent with this
+>  new_data <- read_csv("my_data.csv")
+
+ + shortcuts: 
+  + CTRL +  ALT + I for chunks
+  + CRTL + SHIFT + M for %>% 
+  + ALT + - for <- operator assignment
+  
 Basic of Data Management: Tidy Data and Data Workflow
 ========================================================
 

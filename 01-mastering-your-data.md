@@ -32,36 +32,19 @@ RStudio Interface, Rmarkdown, Shortcuts
 library(tidyverse)
 ```
 
-Basic of Data Management: Tidy Data and Data Workflow
-========================================================
 
+Some general information
+======================================================
 
-
-Data Import
-========================================================
-
-
-Exploratory Data Analysis (EDA)
-========================================================
-
-Data Exploration with Visualization
-========================================================
-
-Tidyverse
-========================================================
-
- + __ggplot2__: data visualisation
- + __dplyr__: data wrangling
- + __readr__: reading data
- + __stringr__: string manipulation
- + __forcats__: dealing with factors
- + __tidyr__: data tidying
+ + Use of panels, console, rmarkdown, environment (grid, list)
+ + Maintain your environment as clean as possible
+ + write clear code: CTRL + SHIFT + A
+ + use comments, talk to yourself in the future!
+ + case matters
  
- 
- Tidyverse 2
-========================================================
- ![Tidyverse packages](Figs/tidyverse-packages.png)
 
-Pivoting
-=======================================================
- ![Pivoting](https://education.rstudio.com/blog/2020/07/teaching-the-tidyverse-in-2020-part-3-data-wrangling-and-tidying/img/tidyr-longer-wider.gif)
+
+
+```
+Error in eval(expr, envir, enclos) : object 'X' not found
+```

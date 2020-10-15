@@ -107,6 +107,7 @@ On the day of the class, we'll provide you with a link to an RStudio Cloud proje
 + Broman, K.W., Woo, K.H., 2017. [Data organization in spreadsheets (No. e3183v1)](https://peerj.com/preprints/3183/). PeerJ Preprints. doi:10.7287/peerj.preprints.3183v1
 + Ellis, S.E., Leek, J.T., 2017. [How to share data for collaboration (No. e3139v5).](https://peerj.com/preprints/3139/) PeerJ Preprints. 
 + Vickers, A.J., Assel, M.J., Sjoberg, D.D., Qin, R., Zhao, Z., Koyama, T., Botchway, A., Wang, X., Huo, D., Kattan, M., Zabor, E.C., Harrell, F., 2020. [Guidelines for Reporting of Figures and Tables for Clinical Research in Urology.](https://www.sciencedirect.com/science/article/pii/S030228382030316X) Eur. Urol. doi:10.1016/j.eururo.2020.04.048
++ O’Donoghue, S.I., Baldi, B.F., Clark, S.J., Darling, A.E., Hogan, J.M., Kaur, S., Maier-Hein, L., McCarthy, D.J., Moore, W.J., Stenau, E., Swedlow, J.R., Vuong, J., Procter, J.B., 2018. Visualization of Biomedical Data. Annu. Rev. Biomed. Data Sci. 1, 275–304. (https://www.annualreviews.org/doi/full/10.1146/annurev-biodatasci-080917-013424)
 + [Tidy Data](https://www.jstatsoft.org/article/view/v059i10) | Wickham | Journal of Statistical Software [WWW Document], n.d.
 + Wilson, G., Bryan, J., Cranston, K., Kitzes, J., Nederbragt, L., Teal, T.K., 2017. [Good enough practices in scientific computing.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510) PLoS Comput. Biol. 13, e1005510.
 <<<<<<< HEAD
