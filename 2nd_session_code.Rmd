@@ -1,0 +1,219 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE)
+# Use include=TRUE for the chunks to be displayed
+```
+
+
+
+
+If you have some issues, please uncomment the line that install the package, removing the # at the beginning
+
+# Packages
+```{r message=FALSE, warning=FALSE, echo=T}
+# install.packages("pacman") # this is a package that allows to manage other packages
+library(pacman)
+```
+
+
+```{r, message=FALSE, echo=FALSE, results='hide', warning=FALSE}
+pacman::p_load(tidyverse, 
+               gtsummary, 
+               janitor, 
+               visdat, 
+               ggpubr, 
+               naniar, 
+               NHANES, 
+               palmerpenguins, 
+               gapminder, 
+               coronavirus)
+```
+
+# Review
+
+Shortcuts
+
+CTRL + ALT + I
+
+
+```{r}
+x <- c(1:55)
+```
+
+```{r}
+x %>% summary
+```
+
+# Explore the dataset
+
+```{r}
+penguins
+```
+```{r}
+dim(penguins)
+```
+```{r}
+glimpse(penguins)
+```
+```{r}
+penguins %>% summary()
+```
+```{r}
+class(penguins$year)
+```
+```{r}
+penguins$year <- as_factor(penguins$year)
+```
+
+```{r}
+class(penguins$year)
+```
+
+```{r}
+View(penguins)
+```
+
+
+
+
+# Distributions
+
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) +
+  geom_histogram(bins = 10) +
+  aes(fill = species) +
+  facet_wrap(~species)
+```
+
+
+
+```{r}
+penguins %>% 
+  
+  drop_na() %>% 
+  
+  ggplot(aes(x = body_mass_g)) +
+  geom_histogram(bins = 10) +
+  aes(fill = species) +
+  facet_grid(sex ~ species)
+```
+
+
+
+
+
+
+
+# Associations
+
+x = cont 
+y = cont
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+  aes(color = species)
+```
+
+
+# Comparison
+
+is the weight similar between penguins?
+
+body_mass
+species factor
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = body_mass_g)) +
+  geom_boxplot()
+```
+
+Compare the bill_length across all species
+
+```{r}
+penguins %>%
+  drop_na() %>% 
+  ggplot(aes(x = species,
+             y = bill_length_mm)) +
+  geom_boxplot() +
+  aes(color = sex)
+```
+
+
+-------------------------------------------
+
+```{r}
+NHANES
+```
+
+```{r}
+View(NHANES)
+```
+
+```{r}
+glimpse(NHANES)
+```
+
+```{r}
+table(NHANES$Gender)
+```
+
+```{r}
+table(NHANES$Race1)
+```
+
+```{r}
+table(NHANES$Gender, 
+      NHANES$Race1)
+```
+```{r}
+table(NHANES$SurveyYr)
+```
+
+```{r}
+NHANES %>% 
+  ggplot(aes(x = Age)) + 
+  geom_histogram(bins = 15) +
+  facet_grid(Gender ~ . )
+```
+
+```{r}
+NHANES %>% 
+  ggplot(aes(x = Height, 
+             y = Weight)) + 
+  geom_point(size = .01)
+```
+Is there any association between the Head Circunference and the income?
+
+```{r}
+NHANES %>% 
+  ggplot(aes(x = HeadCirc, 
+             y = HHIncomeMid)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  aes(color = Gender)
+```
+
+
+
+
+# Trends
+
+
+
+

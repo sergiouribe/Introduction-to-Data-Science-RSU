@@ -4,18 +4,30 @@ output: html_notebook
 ---
 
 
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  include = T,
+  # eval = T,
+  include = T,
+  echo = T
+)
+```
+
+
+
 # Packages
 
-```{r}
+The pacman command allows to easy install other packages
 
+
+```{r}
 pacman::p_load(tidyverse, 
                palmerpenguins)
-
 ```
 
 
 # Dataset
-Now I will open the penguins dataset
+Now I will load the penguins dataset to my enviroment (check the upper right panel)
 
 ```{r}
 data(penguins)
@@ -23,34 +35,55 @@ data(penguins)
 
 
 # Explore
+
+
+With the View() command you can open the dataset in an external tab, as an spreadsheet, but you will not be able to modify it. And that's a good thing, remember: don't touch your data!
+
 ```{r}
 View(penguins)
 ```
 
 
+With the dim() commando, you can see the DIMensions of the dataset, in rows and columns
+
 ```{r}
 dim(penguins)
 ```
 
+I can explore the first six rows of the dataset, and this one of the first things that I do when I have some data
 ```{r}
 head(penguins)
 ```
 
-
+and also the last six rows
 ```{r}
 tail(penguins)
 ```
+With the str(), you can see the STRucture of your dataset (or dataframe). 
+Note that indicates the **class** and the **levels** of each categorical (or **factor**) variable.
+Also, you see the dimensions in the first line. 
+
+It tell us that this dataset is a tibble, a especial kind of dataset, that has 344 rows per 8 columns
 
 ```{r}
 str(penguins)
 ```
+The str() is *super* useful and also one of the first things that you have to examine about your data, and consult several times during your data analysis.
+
+
+The *tidyverse* version of str() is the glimpse() commando
+
 ```{r}
 glimpse(penguins)
 ```
 
+If you modify the width of this panel, making it very 
+
+
 ```{r}
 summary(penguins)
 ```
+
 ```{r}
 class(penguins$year)
 ```
@@ -58,15 +91,68 @@ class(penguins$year)
 penguins$year <- as.factor(penguins$year)
 ```
 
-
+now the year variable should be correctly formatted
 
 ```{r}
 summary(penguins$year)
 ```
+Now it's fixed!
+
+
+# Creating figures with ggplot
+
+ggplot stands for grammar of graphics. 
+
+Just as language has rules with which to communicate any idea, graphics have a grammar. If we understand the components of a graph and how the different parts that make up a graph are related, we can create any type of visualization to communicate a result. 
+
+Essentially, to make a graphic we need three things: 
+1. data
+2. map the data with some aesthetics, for example, in x, y axes, with colors, shapes or sizes, and
+3. a geometric shape that represents the data in the mapping 
+
+
+So the first thing we need is the data
+
+```{r}
+penguins %>%  # the data
+  ggplot()    # we tell: hey ggplot, take this data, and wait for instructions
+```
+
+Secondly, we map the variables of interest
+
+Usually this is done this way: 
+
 ```{r}
 penguins %>% 
-  ggplot()
+  ggplot(mapping = aes(x = bill_length_mm,  #hey ggplot, map these aesthetic variables, in the x axis this variable
+                       y = body_mass_g)) # and in the y axis this other
+  
 ```
+
+
+I personally omit the mapping, so I write
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = body_mass_g))
+```
+
+and is the same result . 
+
+Ahora deberíamos decirle a ggplot cómo mapear esas variables x e y. En este caso, elegiremos mapearlas como puntos.  
+
+```{r, include=TRUE}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = body_mass_g)) + 
+  geom_point()  # this is the geometric object that will map the aesthetic
+```
+
+
+Later, we add more layers as aesthetics elements. 
+
+For example, we can add a color to each point. We add this as an additional aesthetic, see code below
 
 ```{r}
 penguins %>%
@@ -74,44 +160,109 @@ penguins %>%
   ggplot(aes(x = bill_length_mm, 
              y = flipper_length_mm)) +
   geom_point() +
-  aes(color = species) +
+  aes(color = species)  # this is the additional layer
+```
+
+or we can add as an additional aesthetic with the former aesthetics variables used
+```{r}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+             y = flipper_length_mm,
+             color = species))  +   # in this case, here
+  geom_point()
+```
+And is the same result. 
+Now take a moment to look at the graph and reflect on the information provided by the data
+
+
+## EXERCISES
+
+
+
+
+## Tuning your graph
+
+### Themes
+You can change the theme of the graph, the visual appearence, changing the layer that control this, with the commando *theme* and choosing your theme of preference
+
+```{r}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+             y = flipper_length_mm,
+             color = species))  +   
+  geom_point() + 
+  theme_minimal()   # this is one example
+```
+```{r}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+             y = flipper_length_mm,
+             color = species))  +   
+  geom_point() + 
+  theme_dark() # now a dark theme
+```
+Try others!
+
+try
+theme_linedraw()
+theme_light()
+
+```{r}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+             y = flipper_length_mm,
+             color = species))  +   # in this case, here
+  geom_point() 
+```
+You can also install more themes or [create your own theme](https://emanuelaf.github.io/own-ggplot-theme.html)
+
+Some packages with additional themes are: 
+
+[ggpubr](http://www.sthda.com/english/articles/24-ggpubr-publication-ready-plots/) (I use mostly the minimal and some of the ggpubr package)
+and [ggthemes](https://rpubs.com/Mentors_Ubiqum/ggthemes_1)
+
+
+To install use
+```{r}
+pacman::p_load(ggthemes)
+```
+
+and then
+```{r}
+penguins %>%
+  ggplot(aes(x = bill_length_mm,
+             y = flipper_length_mm,
+             color = species))  +   # in this case, here
+  geom_point() + 
+  ggthemes::theme_economist()  # here I say" from the package ggthemes use the theme_economist()
+```
+You can try these themes:   
+ - ggthemes::theme_solarized()
+ - ggthemes::theme_excel()
+
+
+
+# VOY AQUI
+
+### Headings and labels
+
+
+
+# Note
+
+You will find this kind of notation, where the data goes inside the ggplot command. For example: 
+
+```{r}
+ggplot(data = penguins) +
+  (mapping = aes(x = species, 
+                 y = body_mass_g, 
+                 color = sex)) + 
+  geom_boxplot() + 
   theme_minimal()
 ```
+I prefer to leave the data out of the ggplot command, since it's easier to perform some data transformation and then plot it. 
 
-```{r}
-penguins %>% 
-  ggplot(aes(x = bill_length_mm, 
-             y = flipper_length_mm, 
-             color = species, 
-             size = body_mass_g)) + 
-  geom_point(alpha  = .5)
-```
-
-
-
-Elina ask me: are differences of body mass between sexes?
-
-```{r}
-penguins %>%                                              # this is the data
-  drop_na() %>%                                           # leave the na out
-  ggplot(aes(x = species,                                  # the x variable
-             y = body_mass_g)) +
-  geom_boxplot() +
-  aes(fill = sex) +
-  labs(
-    title = "Boxplot of boddy mass by species and sex", 
-    subtitle = "Data from Palmer Penguins", 
-    y = "Body mass (g)", 
-    x = "Species", 
-    color = "Sex"
-  ) +
-  theme_minimal()
-```
-
-```{r}
-ggplot(data = penguins)
-```
-
+For example, in 
 
 
 

@@ -1,0 +1,476 @@
+---
+title: "02 Session: Data Visualizations"
+author: Sergio Uribe
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+
+This code at the beginning tells all others not to show warnings or messages
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE,
+                      message = FALSE, 
+                      echo = TRUE)
+# Use include=TRUE for the chunks to be displayed
+```
+
+# Review
+
+Shortcuts
+
+CTRL + ALT + I
+
+ALT + -
+
+```{r}
+x <- c(1:50)
+```
+
+
+CTRL + ALT + I
+
+```{r}
+x %>% 
+  summary
+```
+
+Beautify your code
+
+CTRL + SHIFT + A
+
+```{r}
+x<-c(1:53) 
+```
+
+
+
+# Packages
+```{r}
+# install.packages("pacman") # this is a package that allows to manage other packages
+library(pacman)
+```
+
+```{r}
+pacman::p_load(tidyverse, 
+               gtsummary, 
+               janitor, 
+               visdat, 
+               ggpubr, 
+               naniar, 
+               NHANES, 
+               palmerpenguins, 
+               gapminder, 
+               coronavirus)
+```
+
+
+# Explore the dataset
+
+```{r}
+penguins
+```
+
+```{r}
+View(penguins)
+```
+
+```{r}
+dim(penguins)
+```
+
+```{r}
+head(penguins)
+```
+
+```{r}
+tail(penguins)
+```
+
+```{r}
+summary(penguins)
+```
+
+To access one specific variable, use the dollar sign
+
+```{r}
+summary(penguins$bill_depth_mm)
+```
+
+
+
+Check the class of the variables
+```{r}
+class(penguins$year)
+```
+
+# Types of variables in R
+
+```{r}
+glimpse(penguins)
+```
+_fct_ : factors, can be nominal with two levels (as male, female) or more categories. By default R try to order the levels, from 1 and on or A and on. 
+
+_int_ : integer numbers
+_dbl_ : any number, even with decimals
+
+Other types
+_logical_
+_date_ 
+
+You can change the class of a variable
+
+```{r}
+class(penguins$year)
+```
+
+```{r}
+summary(penguins$year)
+```
+
+Useless, so we can change the variable
+
+```{r}
+penguins$year <- as_factor(penguins$year)
+```
+
+```{r}
+class(penguins$year)
+```
+
+```{r}
+summary(penguins$year)
+```
+# Data visualizations
+
+## The grammar of graphics
+
+Three things: 
+ 1. Data
+ 1. the mapping of the aesthetics elements, and
+ 1. one or more geoms to visualize the data in the mappings
+
+```{r}
+penguins %>% 
+  ggplot()
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm))
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point()
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  geom_smooth(method = "lm" )
+```
+What can be concluded with the visualization of the correlation between the bill depth and bill length?
+
+### The Simpson Paradox
+Add more layers of information
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  geom_smooth(method = "lm" ) + 
+  aes(color = species)
+```
+
+## Data Wrangling
+
+```{r}
+penguins %>% 
+  select(species)
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie")
+```
+
+
+## DISTRIBUTIONS
+
+### Distribucions: geom_histogram
+What is the weight of the penguins?
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram()
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10)
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10) + 
+  aes(color = species)
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species)
+```
+
+### Facetting
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g )) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species) + 
+  facet_wrap(~species)
+```
+More control
+
+facet_grid
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g )) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species) + 
+  facet_grid(species ~ .)
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g )) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species) + 
+  facet_grid(species ~ sex)
+```
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g )) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species) + 
+  facet_grid(species ~ sex)
+```
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g )) + 
+  geom_histogram(bins = 10) + 
+  aes(fill = species) + 
+  facet_grid(sex ~ species)
+```
+
+
+###EXERCISE DATA EXPLORATION AND HISTOGRAMS 
+
+Load NHANES
+```{r}
+NHANES
+```
+```{r}
+glimpse(NHANES)
+```
+Explore NHANES
+
+Make some tables for Gender
+
+Table for Race1
+
+Crosstable Gender and Race1
+
+Create a new dataset for 2011_12
+```{r}
+nhanes_2011 <- NHANES %>% filter(NHANES$SurveyYr == "2011_12" )
+```
+
+Explore the distribution of BMI
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = BMI)) + 
+  geom_histogram()
+```
+Change the bins
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = BMI)) + 
+  geom_histogram(bins = 10)
+```
+Divide by gender
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = BMI)) + 
+  geom_histogram(bins = 10) + 
+  facet_wrap(~Gender)
+```
+By sex and race
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = BMI)) + 
+  geom_histogram(bins = 30) + 
+  facet_grid(Gender~ Race1)
+```
+
+### Distribucions: geom_bar
+
+Which island do penguins come from?
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = island)) + 
+  geom_bar() + 
+  facet_wrap(~species)
+```
+```{r}
+
+```
+
+
+
+## ASSOCIATIONS
+
+### Distribucions: geom_point
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  geom_smooth(method = "lm" ) + 
+  aes(color = species)
+```
+
+Explore the correlation of height and weight for the NHANES dataset
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Height, 
+             y = Weight)) + 
+  geom_point()
+```
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Height, 
+             y = Weight)) + 
+  geom_point() + 
+  aes(color = Gender)
+```
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Height, 
+             y = Weight)) + 
+  geom_point() + 
+  aes(color = Gender) + 
+  facet_wrap(~Gender)
+```
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Height, 
+             y = Weight)) + 
+  geom_point() + 
+  aes(color = Gender) + 
+  facet_wrap(~Race1) 
+```
+
+
+BMI by hours sleep
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = BMI, 
+             y = SleepHrsNight)) + 
+  geom_point() +
+  geom_smooth()
+```
+Head circumference and HHIncomeMid
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = HeadCirc, 
+             y = HHIncomeMid, 
+             color = Race1)) +
+  geom_point()
+```
+
+
+and by gender?
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = HeadCirc, 
+             y = HHIncomeMid, 
+             color = Race1)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+```
+
+
+## COMPARISONS
+
+One variable is factor and the another is continuous
+
+
+Example: boddy_mass by species
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = body_mass_g)) + 
+  geom_boxplot()
+```
+Explore the NHANES and identify differences in TotChol
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Race1, 
+             y = TotChol)) + 
+  geom_boxplot()
+```
+and now by gender: hint: add a new aes as color or fill
+
+```{r}
+nhanes_2011 %>% 
+  ggplot(aes(x = Race1, 
+             y = TotChol)) + 
+  geom_boxplot() + 
+  aes(color = Gender)
+```
+
+
+## TRENDS
+
+```{r}
+covid <- read_csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/data.csv")
+```
+```{r}
+head(covid)
+```
+
+

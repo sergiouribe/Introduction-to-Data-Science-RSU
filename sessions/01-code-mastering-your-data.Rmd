@@ -65,7 +65,7 @@ this
 x
 ```
 is different from this
-```{r}
+```{r, echo=FALSE}
 X
 ```
 
@@ -263,6 +263,21 @@ dirty_data %>%
 
 # Data visualization
 
+## Introduction to data viz
+
+**Understanding the data**
+
+To design an effective visualization with a clear purpose, you must thoroughly understand your data. The following points will help you find the information you want to convey with your data:
+
+
+ - What kind of data is it? Nominal, ordinal, interval or ratio data?
+ - How do the different parts of the data relate to each other?
+ - Can you organize the data in a way that makes it easy for you to create your visualizations?
+ - What do you want to communicate with your data?
+
+
+## The ggplot2 package
+
 The grammar of graphics (ggplot)
 
 To contruct a graph, we need  
@@ -414,6 +429,12 @@ penguins %>%
   ggplot(aes(x = body_mass_g)) + 
   geom_histogram()
 ```
+
+Note that ggplot warns that 30 bins are being used. 
+
+You can try changing it and see if the visualization improves for the idea you want to communicate
+
+
 ```{r}
 penguins %>% 
   ggplot(aes(x = body_mass_g)) + 
@@ -422,24 +443,70 @@ penguins %>%
 ```{r}
 penguins %>% 
   ggplot(aes(x = body_mass_g)) + 
-  geom_histogram(bins = 30)
-```
-```{r}
-penguins %>% 
-  ggplot(aes(x = body_mass_g,  
-               fill = sex)) + 
-  geom_histogram(bins = 10)
+  geom_histogram(bins = 5)
 ```
 
-Exercise: by species
+You can add layers of data, in this case, filling with the sex
 
 ```{r}
 penguins %>% 
   ggplot(aes(x = body_mass_g,  
-               fill = species)) + 
+               fill = sex)) +  # additional layer
   geom_histogram(bins = 10)
 ```
-Facetting
+
+
+also we can drop the NA values
+```{r}
+penguins %>% 
+  drop_na() %>%                    # here I drop the NA values
+  ggplot(aes(x = body_mass_g,  
+               fill = sex)) +  # additional layer
+  geom_histogram(bins = 10)
+```
+
+
+### Facetting
+We can also simplify the visualization by dividing the graphs by one or two categorical variables of interest. We do this by creating facets
+
+```{r}
+penguins %>% 
+  drop_na() %>%                    
+  ggplot(aes(x = body_mass_g)) +  
+  geom_histogram(bins = 10)
+```
+One facet, per species
+
+```{r}
+penguins %>% 
+  drop_na() %>%                    
+  ggplot(aes(x = body_mass_g)) +  
+  geom_histogram(bins = 10) + 
+  facet_wrap(~species) # here ggplot will find the best way to show the graph
+```
+
+We can have a finer control through facet_grid()
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10) +
+  facet_grid(species ~ sex) # rows ~ columns
+```
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10) +
+  facet_grid(sex ~ species) # rows ~ columns
+```
+
+
+Exercise: by island
+
+
 
 ```{r}
 penguins %>% 
@@ -457,6 +524,7 @@ penguins %>%
 ```
 ```{r}
 penguins %>% 
+  drop_na() %>% 
   ggplot(aes(x = body_mass_g,  
                fill = species)) + 
   geom_histogram(bins = 10) + 
@@ -522,8 +590,20 @@ penguins %>%
        color = "Sex")
 ```
 
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = flipper_length_mm)) + 
+  geom_point()
+```
+
 
 Simpson Paradox
+
+```{r}
+class(penguins$bill_length_mm)
+```
+
 
 ```{r}
 penguins %>% 
