@@ -211,9 +211,177 @@ NHANES %>%
 
 
 
-
 # Trends
 
+See Hans Rosling Video
+
+```{r}
+gapminder
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) # nothing to plot yet!
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point()
+```
+
+Crowded data visualization, some values too high
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = log10(gdpPercap), y = lifeExp)) +
+  geom_point()
+```
+
+a better way to log transform
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() + 
+  scale_x_log10()
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() + 
+  scale_x_log10() + 
+  aes(color = continent)
+```
+
+
+# CONTINUAR!
+
+# Workshop: COVID in Europe
+
+Go to
+
+```{r}
+covid <- read_csv("https://github.com/owid/covid-19-data/raw/master/public/data/owid-covid-data.csv")
+```
+```{r}
+glimpse(covid)
+```
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_per_million)) +
+  geom_point() 
+```
+
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_per_million)) +
+  geom_point() +
+  scale_y_log10()
+```
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_per_million)) +
+  geom_point() +
+  scale_y_log10() + 
+  aes(color = continent)
+```
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_per_million)) +
+  geom_line() +
+  scale_y_log10() + 
+  aes(color = continent) + 
+  aes(group = continent)
+```
+
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million  )) + 
+  stat_summary(geom = "line") + 
+  aes(color = continent) + 
+  scale_y_log10()
+```
+```{r}
+covid %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million  )) + 
+  stat_summary(geom = "line") + 
+  aes(color = continent) + 
+  scale_y_log10() + 
+  facet_wrap(~continent)
+```
+
+```{r}
+covid %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million)) + 
+  geom_line()
+```
+
+
+```{r}
+covid %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million)) + 
+  geom_line() + 
+  aes(group = location)
+```
+
+```{r}
+covid %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million)) + 
+  geom_line() + 
+  aes(group = location) + 
+  aes(color = location)
+```
+
+```{r}
+covid %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million)) + 
+  geom_line() + 
+  aes(group = location) + 
+  aes(color = location) + 
+  scale_y_log10()
+```
+```{r}
+covid %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  ggplot(aes(x = date, 
+             y = new_cases_smoothed_per_million)) + 
+  geom_line() + 
+  aes(group = location) + 
+  aes(color = location) + 
+  scale_y_log10() + 
+  facet_wrap(~location)
+```
+
+
+# Workshop: How drive the latvians?
+
+http://bit.ly/lv-accidents
+
+http://bit.ly/world-pop2020
+
+
+```{r}
+road <- read_csv("http://bit.ly/lv-accidents")
+```
+```{r}
+population2020 <- read_csv("http://bit.ly/world-pop2020")
+```
 
 
 
