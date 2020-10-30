@@ -358,14 +358,25 @@ covid %>%
 ```
 ```{r}
 covid %>% 
-  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland")) %>% 
+  filter(location %in% c("Latvia", "Lithuania", "Estonia", "Sweden", "Finland", "Poland", 
+                         "Spain", "Italy", "Germany", 
+                         "Chile", "United States", "United Kingdom")) %>% 
   ggplot(aes(x = date, 
              y = new_cases_smoothed_per_million)) + 
   geom_line() + 
   aes(group = location) + 
   aes(color = location) + 
   scale_y_log10() + 
-  facet_wrap(~location)
+  facet_wrap(~location) + 
+  theme_minimal() + 
+  labs(
+    title = "COVID in selected european countries per million inhab. ", 
+    subtitle = "Data from URL", 
+    y = "New cases per million inhab.", 
+    x = "Date", 
+    caption = "By My Name"
+  ) +
+   theme(legend.position = "none") 
 ```
 
 
