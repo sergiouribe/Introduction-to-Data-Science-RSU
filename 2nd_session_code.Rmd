@@ -394,5 +394,71 @@ road <- read_csv("http://bit.ly/lv-accidents")
 population2020 <- read_csv("http://bit.ly/world-pop2020")
 ```
 
+## Car accidents OECD
 
+https://data.oecd.org/transport/road-accidents.htm
+
+
+```{r}
+accidentsOECD <- read_csv("https://stats.oecd.org/sdmx-json/data/DP_LIVE/.ROADACCID.../OECD?contentType=csv&detail=code&separator=comma&csv-lang=en")
+```
+
+```{r}
+head(accidentsOECD)
+```
+
+```{r}
+str(accidentsOECD)
+```
+```{r}
+glimpse(accidentsOECD)
+```
+LOCATION
+========
+LVA
+EST
+LTU
+DEU
+
+SUBJECT 
+========
+ACCIDENTCASUAL          DEATH         INJURE 
+
+MEASURES
+=========
+1000000HAB 1000000VEH        NBR
+
+
+```{r}
+accidentsOECD %>% 
+  filter(MEASURE == "1000000HAB" & SUBJECT == "DEATH") %>% 
+  filter(LOCATION %in% c("LVA", "EST", "LTU", "DEU")) %>% 
+  filter(TIME > 2009) %>% 
+  ggplot(aes(x = TIME, 
+             y = Value, 
+             color = LOCATION)) + 
+  geom_line() +
+  geom_text(aes(label = round(Value, 1)),
+            vjust = "outward", hjust = "outward",
+            show.legend = FALSE, size = 3) + 
+  geom_point()
+  
+```
+
+
+```{r}
+accidentsOECD %>% 
+  filter(MEASURE == "1000000HAB" & SUBJECT == "DEATH" ) %>% 
+  # filter(SUBJECT == "Death") %>% 
+  ggplot(aes(x =  fct_reorder(LOCATION, Value), 
+             y = Value)) + 
+  geom_point() + 
+  # facet_wrap(~SUBJECT) + 
+  # scale_y_log10() + 
+  coord_flip() +
+  aes(color = SUBJECT) + 
+  facet_grid(TIME ~ SUBJECT) + 
+  scale_y_log10()
+  
+```
 
