@@ -1,0 +1,53 @@
+---
+title: "4th Session"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+pacman::p_load(tidyverse, 
+               janitor, 
+               naniar, 
+               gtsummary)
+```
+
+
+# Dataset
+https://data.humdata.org/dataset/world-bank-combined-indicators-for-latvia
+
+## load dataset
+
+```{r}
+lv <- read_csv("https://data.humdata.org/dataset/14245852-3dec-4842-a320-9efd3f2bfe66/resource/5ec17032-16ec-4522-84a8-044e0e2a9042/download/indicators_lva.csv")
+```
+## Check dataset
+```{r}
+head(lv)
+```
+ups, 2nd row!
+
+delete it!
+
+```{r}
+
+lv <- lv %>% 
+  slice(-1)
+
+
+```
+
+
+```{r}
+summary(lv)
+```
+
+# Data exploration
+
+# Data cleaning 
+
+# Variables change or creation
+
+
+
+
