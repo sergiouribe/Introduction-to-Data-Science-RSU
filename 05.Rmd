@@ -1,0 +1,303 @@
+---
+title: "05 Recapitulation"
+output:
+  html_notebook: default
+  html_document:
+    df_print: paged
+  pdf_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE)
+# Use include=TRUE for the chunks to be displayed
+```
+
+```{r}
+pacman::p_load(tidyverse, # for data science
+               dataMaid,  # to create data coding book
+               codebook,  # alternative for codebooks
+               janitor, # to clean data
+               NHANES, # dataset example to play it
+               gtsummary) # for tables
+```
+
+# Data entry
+
+Best practice: separate the data entry process and keep a copy of the raw data. 
+Export to CSV file and then clean it and use it for data analysis
+
+
+## Dirty data
+
+
+
+
+```{r}
+dirty <- readr::read_csv("https://tinyurl.com/dirtyDataRSU")
+```
+
+
+```{r}
+glimpse(dirty)
+```
+```{r}
+View(dirty)
+```
+
+first try
+
+```{r}
+dirty %>% 
+  janitor::clean_names()
+```
+
+Perfect, let's store
+```{r}
+cleaner <- dirty %>% 
+  janitor::clean_names()
+```
+
+```{r}
+glimpse(cleaner)
+```
+
+So, before
+
+```{r}
+dirty %>% 
+  names()
+```
+After 
+```{r}
+cleaner %>% 
+  names()
+```
+
+Duplicated data
+
+```{r}
+cleaner %>% 
+  janitor::get_dupes(contains("name"))
+```
+
+```{r}
+table(cleaner$subject)
+```
+
+
+Simple tables
+
+One variable
+```{r}
+cleaner %>% 
+  janitor::tabyl(subject)
+```
+two variables
+```{r}
+cleaner %>% 
+  janitor::tabyl(employee_status, full_time)
+```
+
+
+
+Remove empty  rows
+
+```{r}
+cleaner <- cleaner %>% 
+  janitor::remove_empty(c("rows", "cols"))
+```
+
+# NICE TABLES
+
+## gt_summary
+
+```{r}
+NHANES %>% 
+  glimpse()
+```
+
+## Create a subset dataset of NHANES
+
+SELECT
+```{r}
+miniNHANES <- NHANES %>%
+  select(
+    Gender,
+    Age,
+    Race1,
+    Education,
+    MaritalStatus,
+    HHIncomeMid,
+    Weight,
+    Height,
+    BMI,
+    BPSys1,
+    BPDia1,
+    DirectChol,
+    TotChol,
+    Diabetes,
+    SleepHrsNight,
+    PhysActiveDays,
+    SmokeNow,
+    HardDrugs
+  )
+
+```
+
+
+## Make a summary table by gender
+This is the Table 1. 
+```{r}
+miniNHANES %>% 
+  select(Age, Race1, SmokeNow, Gender) %>% 
+  gtsummary::tbl_summary(by = Gender) %>% 
+  gtsummary::bold_labels()
+
+```
+
+## Histogram age by gender
+
+```{r}
+miniNHANES %>% 
+  ggplot(aes(x = Age)) +
+  geom_histogram(bins = 10) + 
+  facet_grid(Gender~.)
+```
+## Point age and BMI by race and Gender
+
+```{r}
+miniNHANES %>% 
+  ggplot(aes(x = Age, 
+             y = BMI, 
+             color = Race1)) +
+  geom_point() + 
+  facet_grid(Gender~Race1)
+```
+
+## Create new var
+
+hypertension
+
+Based on syst or diast
+Prevalent hypertension in National Health and Nutrition Examination Surveys (NHANES) is traditionally defined as blood pressure (BP) ≥140 mmHg systolic and/or ≥90 diastolic
+
+```{r}
+miniNHANES %>% 
+  mutate()
+```
+
+## calculate mean weight and sd by race only in people over 18 years old
+
+## Calculate age mean by race and age
+
+## Count!
+
+```{r}
+miniNHANES %>% 
+  count(Race1)
+```
+```{r}
+miniNHANES %>%
+  group_by(Gender) %>% 
+  count(Race1)
+```
+```{r}
+miniNHANES %>%
+  group_by(Gender) %>% 
+  count(Race1) %>% 
+  pivot_wider(names_from =  Gender, values_from = n)
+```
+
+This is similar to
+
+```{r}
+miniNHANES %>% 
+  select(Race1, Gender) %>% 
+  gtsummary::tbl_summary(by = Gender)
+```
+
+But the advantage is that you can feed a plot with it
+```{r}
+miniNHANES %>%
+  group_by(Diabetes, Gender) %>% 
+  count(Race1) %>%
+  ggplot(aes(x = Diabetes, 
+             y = n, 
+             fill = Gender)) + 
+  geom_col()
+```
+
+nad here the same plot but dodged
+
+```{r}
+miniNHANES %>%
+  group_by(Diabetes, Gender) %>% 
+  count(Race1) %>%
+  ggplot(aes(x = Diabetes, 
+             y = n, 
+             fill = Gender)) + 
+  geom_bar(position="dodge", stat = "identity")
+```
+
+and here stacked
+```{r}
+miniNHANES %>%
+  group_by(Diabetes, Gender) %>% 
+  count(Race1) %>%
+  ggplot(aes(x = Diabetes, 
+             y = n, 
+             fill = Gender)) + 
+  geom_bar(position="stack", stat = "identity")
+```
+
+and stacked by 100%
+
+```{r}
+miniNHANES %>%
+  group_by(Diabetes, Gender) %>% 
+  count(Race1) %>%
+  ggplot(aes(x = Diabetes, 
+             y = n, 
+             fill = Gender)) + 
+  geom_bar(position="fill", stat = "identity")
+```
+
+# Codebook
+
+```{r}
+dataMaid::makeCodebook(miniNHANES)
+```
+Add a description for the variables
+
+```{r}
+attr(miniNHANES$Age, "shortDescription") <-
+     "Age in years."
+```
+
+```{r}
+attr(miniNHANES$Education, "shortDescription") <-
+     "Educational level, this data was extracted from the database XXX and etc etc"
+```
+
+
+and now re-run the codebook
+
+
+```{r}
+dataMaid::makeCodebook(miniNHANES, replace=TRUE)
+```
+
+
+And you can make a data report of the dataset
+
+```{r}
+dataMaid::makeDataReport(miniNHANES)
+```
+
+
+

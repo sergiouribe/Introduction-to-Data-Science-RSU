@@ -1,0 +1,115 @@
+---
+title: "R Notebook"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+
+# COVID
+
+https://j.mp/34Wj8rx
+
+
+```{r}
+covid <- read_csv("https://opendata.ecdc.europa.eu/covid19/casedistribution/csv")
+```
+```{r}
+head(covid)
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories == "Latvia")
+```
+```{r}
+covid$dateRep <- lubridate::dmy(covid$dateRep)
+```
+
+
+
+```{r}
+covid %>% 
+  filter(countriesAndTerritories == "Latvia") %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases)) + 
+  geom_line()
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories == "Latvia") %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases)) + 
+  geom_line()
+```
+
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases)) + 
+  geom_line()
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases, 
+             group  = countriesAndTerritories)) + 
+  geom_line()
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases, 
+             group  = countriesAndTerritories)) + 
+  geom_line() + 
+  aes(color = countriesAndTerritories)
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases, 
+             group  = countriesAndTerritories)) + 
+  geom_line() + 
+  aes(color = countriesAndTerritories) + 
+  scale_y_log10()
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases, 
+             group  = countriesAndTerritories)) + 
+  geom_line() + 
+  aes(color = countriesAndTerritories) + 
+  scale_y_log10() + 
+  facet_grid(countriesAndTerritories~.)
+```
+```{r}
+covid %>% 
+  filter(countriesAndTerritories %in% c("Latvia", "Estonia", "Lithuania")) %>% 
+  ggplot(aes(x = dateRep, 
+             y = cases, 
+             group  = countriesAndTerritories, 
+             size = deaths)) + 
+  geom_line() + 
+  aes(color = countriesAndTerritories) + 
+  scale_y_log10() + 
+  facet_grid(countriesAndTerritories~.)
+```
+
+
+# Workshop: COVID in Europe
+
+Go to
+
+```{r}
+covid <- read_csv("https://github.com/owid/covid-19-data/raw/master/public/data/owid-covid-data.csv")
+```
+

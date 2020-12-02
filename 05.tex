@@ -1,0 +1,445 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={05 Recapitulation},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{05 Recapitulation}
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+\maketitle
+
+\hypertarget{data-entry}{%
+\section{Data entry}\label{data-entry}}
+
+Best practice: separate the data entry process and keep a copy of the
+raw data. Export to CSV file and then clean it and use it for data
+analysis
+
+\hypertarget{dirty-data}{%
+\subsection{Dirty data}\label{dirty-data}}
+
+\begin{verbatim}
+## Rows: 13
+## Columns: 12
+## $ `First Name`        <chr> "Jason", "Jason", "Alicia", "Ada", "Desus", "Ch...
+## $ `last name`         <chr> "Bourne", "Bourne", "Keys", "Lovelace", "Nice",...
+## $ `Employee Status`   <chr> "Teacher", "Teacher", "Teacher", "Teacher", "Ad...
+## $ Subject             <chr> "PE", "Drafting", "Music", "Err:504", "Dean", "...
+## $ X5                  <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ `Hire Date`         <dbl> 39690, 39690, 37118, 27515, 41431, 11037, 11037...
+## $ `% Allocated`       <chr> "75%", "25%", "100%", "100%", "100%", "50%", "5...
+## $ `Full time?`        <chr> "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"...
+## $ `do not edit! --->` <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ Certification       <chr> "Physical ed", "Physical ed", "Instr. music", "...
+## $ Certification_1     <chr> "Theater", "Theater", "Vocal music", "Computers...
+## $ `spaces in cells`   <chr> "r", "r", "r", "r", "r", "r", "r", NA, "r", "r"...
+\end{verbatim}
+
+first try
+
+\begin{verbatim}
+## # A tibble: 13 x 12
+##    first_name last_name employee_status subject x5    hire_date percent_allocat~
+##    <chr>      <chr>     <chr>           <chr>   <lgl>     <dbl> <chr>           
+##  1 Jason      Bourne    Teacher         PE      NA        39690 75%             
+##  2 Jason      Bourne    Teacher         Drafti~ NA        39690 25%             
+##  3 Alicia     Keys      Teacher         Music   NA        37118 100%            
+##  4 Ada        Lovelace  Teacher         Err:504 NA        27515 100%            
+##  5 Desus      Nice      Administration  Dean    NA        41431 100%            
+##  6 Chien-Shi~ Wu        Teacher         Physics NA        11037 50%             
+##  7 Chien-Shi~ Wu        Teacher         Chemis~ NA        11037 50%             
+##  8 <NA>       <NA>      <NA>            <NA>    NA           NA <NA>            
+##  9 James      Joyce     Teacher         English NA        32994 50%             
+## 10 Hedy       Lamarr    Teacher         Science NA        27919 50%             
+## 11 Carlos     Boozer    Coach           Basket~ NA        42221 Err:502         
+## 12 Young      Boozer    Coach           <NA>    NA        34700 Err:502         
+## 13 Micheal    Larsen    Teacher         English NA        40071 80%             
+## # ... with 5 more variables: full_time <chr>, do_not_edit <lgl>,
+## #   certification <chr>, certification_1 <chr>, spaces_in_cells <chr>
+\end{verbatim}
+
+Perfect, let's store
+
+\begin{verbatim}
+## Rows: 13
+## Columns: 12
+## $ first_name        <chr> "Jason", "Jason", "Alicia", "Ada", "Desus", "Chie...
+## $ last_name         <chr> "Bourne", "Bourne", "Keys", "Lovelace", "Nice", "...
+## $ employee_status   <chr> "Teacher", "Teacher", "Teacher", "Teacher", "Admi...
+## $ subject           <chr> "PE", "Drafting", "Music", "Err:504", "Dean", "Ph...
+## $ x5                <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ hire_date         <dbl> 39690, 39690, 37118, 27515, 41431, 11037, 11037, ...
+## $ percent_allocated <chr> "75%", "25%", "100%", "100%", "100%", "50%", "50%...
+## $ full_time         <chr> "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", ...
+## $ do_not_edit       <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+## $ certification     <chr> "Physical ed", "Physical ed", "Instr. music", "PE...
+## $ certification_1   <chr> "Theater", "Theater", "Vocal music", "Computers",...
+## $ spaces_in_cells   <chr> "r", "r", "r", "r", "r", "r", "r", NA, "r", "r", ...
+\end{verbatim}
+
+So, before
+
+\begin{verbatim}
+##  [1] "First Name"        "last name"         "Employee Status"  
+##  [4] "Subject"           "X5"                "Hire Date"        
+##  [7] "% Allocated"       "Full time?"        "do not edit! --->"
+## [10] "Certification"     "Certification_1"   "spaces in cells"
+\end{verbatim}
+
+After
+
+\begin{verbatim}
+##  [1] "first_name"        "last_name"         "employee_status"  
+##  [4] "subject"           "x5"                "hire_date"        
+##  [7] "percent_allocated" "full_time"         "do_not_edit"      
+## [10] "certification"     "certification_1"   "spaces_in_cells"
+\end{verbatim}
+
+Duplicated data
+
+\begin{verbatim}
+## # A tibble: 4 x 13
+##   first_name last_name dupe_count employee_status subject x5    hire_date
+##   <chr>      <chr>          <int> <chr>           <chr>   <lgl>     <dbl>
+## 1 Chien-Shi~ Wu                 2 Teacher         Physics NA        11037
+## 2 Chien-Shi~ Wu                 2 Teacher         Chemis~ NA        11037
+## 3 Jason      Bourne             2 Teacher         PE      NA        39690
+## 4 Jason      Bourne             2 Teacher         Drafti~ NA        39690
+## # ... with 6 more variables: percent_allocated <chr>, full_time <chr>,
+## #   do_not_edit <lgl>, certification <chr>, certification_1 <chr>,
+## #   spaces_in_cells <chr>
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Basketball  Chemistry       Dean   Drafting    English    Err:504      Music 
+##          1          1          1          1          2          1          1 
+##         PE    Physics    Science 
+##          1          1          1
+\end{verbatim}
+
+Simple tables
+
+One variable
+
+\begin{verbatim}
+##     subject n    percent valid_percent
+##  Basketball 1 0.07692308    0.09090909
+##   Chemistry 1 0.07692308    0.09090909
+##        Dean 1 0.07692308    0.09090909
+##    Drafting 1 0.07692308    0.09090909
+##     English 2 0.15384615    0.18181818
+##     Err:504 1 0.07692308    0.09090909
+##       Music 1 0.07692308    0.09090909
+##          PE 1 0.07692308    0.09090909
+##     Physics 1 0.07692308    0.09090909
+##     Science 1 0.07692308    0.09090909
+##        <NA> 2 0.15384615            NA
+\end{verbatim}
+
+two variables
+
+\begin{verbatim}
+##  employee_status No Yes NA_
+##   Administration  0   1   0
+##            Coach  2   0   0
+##          Teacher  3   6   0
+##             <NA>  0   0   1
+\end{verbatim}
+
+Remove empty rows
+
+\hypertarget{nice-tables}{%
+\section{NICE TABLES}\label{nice-tables}}
+
+\hypertarget{gt_summary}{%
+\subsection{gt\_summary}\label{gt_summary}}
+
+\begin{verbatim}
+## Rows: 10,000
+## Columns: 76
+## $ ID               <int> 51624, 51624, 51624, 51625, 51630, 51638, 51646, 5...
+## $ SurveyYr         <fct> 2009_10, 2009_10, 2009_10, 2009_10, 2009_10, 2009_...
+## $ Gender           <fct> male, male, male, male, female, male, male, female...
+## $ Age              <int> 34, 34, 34, 4, 49, 9, 8, 45, 45, 45, 66, 58, 54, 1...
+## $ AgeDecade        <fct>  30-39,  30-39,  30-39,  0-9,  40-49,  0-9,  0-9, ...
+## $ AgeMonths        <int> 409, 409, 409, 49, 596, 115, 101, 541, 541, 541, 7...
+## $ Race1            <fct> White, White, White, Other, White, White, White, W...
+## $ Race3            <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ Education        <fct> High School, High School, High School, NA, Some Co...
+## $ MaritalStatus    <fct> Married, Married, Married, NA, LivePartner, NA, NA...
+## $ HHIncome         <fct> 25000-34999, 25000-34999, 25000-34999, 20000-24999...
+## $ HHIncomeMid      <int> 30000, 30000, 30000, 22500, 40000, 87500, 60000, 8...
+## $ Poverty          <dbl> 1.36, 1.36, 1.36, 1.07, 1.91, 1.84, 2.33, 5.00, 5....
+## $ HomeRooms        <int> 6, 6, 6, 9, 5, 6, 7, 6, 6, 6, 5, 10, 6, 10, 10, 4,...
+## $ HomeOwn          <fct> Own, Own, Own, Own, Rent, Rent, Own, Own, Own, Own...
+## $ Work             <fct> NotWorking, NotWorking, NotWorking, NA, NotWorking...
+## $ Weight           <dbl> 87.4, 87.4, 87.4, 17.0, 86.7, 29.8, 35.2, 75.7, 75...
+## $ Length           <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ HeadCirc         <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ Height           <dbl> 164.7, 164.7, 164.7, 105.4, 168.4, 133.1, 130.6, 1...
+## $ BMI              <dbl> 32.22, 32.22, 32.22, 15.30, 30.57, 16.82, 20.64, 2...
+## $ BMICatUnder20yrs <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ BMI_WHO          <fct> 30.0_plus, 30.0_plus, 30.0_plus, 12.0_18.5, 30.0_p...
+## $ Pulse            <int> 70, 70, 70, NA, 86, 82, 72, 62, 62, 62, 60, 62, 76...
+## $ BPSysAve         <int> 113, 113, 113, NA, 112, 86, 107, 118, 118, 118, 11...
+## $ BPDiaAve         <int> 85, 85, 85, NA, 75, 47, 37, 64, 64, 64, 63, 74, 85...
+## $ BPSys1           <int> 114, 114, 114, NA, 118, 84, 114, 106, 106, 106, 12...
+## $ BPDia1           <int> 88, 88, 88, NA, 82, 50, 46, 62, 62, 62, 64, 76, 86...
+## $ BPSys2           <int> 114, 114, 114, NA, 108, 84, 108, 118, 118, 118, 10...
+## $ BPDia2           <int> 88, 88, 88, NA, 74, 50, 36, 68, 68, 68, 62, 72, 88...
+## $ BPSys3           <int> 112, 112, 112, NA, 116, 88, 106, 118, 118, 118, 11...
+## $ BPDia3           <int> 82, 82, 82, NA, 76, 44, 38, 60, 60, 60, 64, 76, 82...
+## $ Testosterone     <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ DirectChol       <dbl> 1.29, 1.29, 1.29, NA, 1.16, 1.34, 1.55, 2.12, 2.12...
+## $ TotChol          <dbl> 3.49, 3.49, 3.49, NA, 6.70, 4.86, 4.09, 5.82, 5.82...
+## $ UrineVol1        <int> 352, 352, 352, NA, 77, 123, 238, 106, 106, 106, 11...
+## $ UrineFlow1       <dbl> NA, NA, NA, NA, 0.094, 1.538, 1.322, 1.116, 1.116,...
+## $ UrineVol2        <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ UrineFlow2       <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ Diabetes         <fct> No, No, No, No, No, No, No, No, No, No, No, No, No...
+## $ DiabetesAge      <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ HealthGen        <fct> Good, Good, Good, NA, Good, NA, NA, Vgood, Vgood, ...
+## $ DaysPhysHlthBad  <int> 0, 0, 0, NA, 0, NA, NA, 0, 0, 0, 10, 0, 4, NA, NA,...
+## $ DaysMentHlthBad  <int> 15, 15, 15, NA, 10, NA, NA, 3, 3, 3, 0, 0, 0, NA, ...
+## $ LittleInterest   <fct> Most, Most, Most, NA, Several, NA, NA, None, None,...
+## $ Depressed        <fct> Several, Several, Several, NA, Several, NA, NA, No...
+## $ nPregnancies     <int> NA, NA, NA, NA, 2, NA, NA, 1, 1, 1, NA, NA, NA, NA...
+## $ nBabies          <int> NA, NA, NA, NA, 2, NA, NA, NA, NA, NA, NA, NA, NA,...
+## $ Age1stBaby       <int> NA, NA, NA, NA, 27, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ SleepHrsNight    <int> 4, 4, 4, NA, 8, NA, NA, 8, 8, 8, 7, 5, 4, NA, 5, 7...
+## $ SleepTrouble     <fct> Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, No, No...
+## $ PhysActive       <fct> No, No, No, NA, No, NA, NA, Yes, Yes, Yes, Yes, Ye...
+## $ PhysActiveDays   <int> NA, NA, NA, NA, NA, NA, NA, 5, 5, 5, 7, 5, 1, NA, ...
+## $ TVHrsDay         <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ CompHrsDay       <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+## $ TVHrsDayChild    <int> NA, NA, NA, 4, NA, 5, 1, NA, NA, NA, NA, NA, NA, 4...
+## $ CompHrsDayChild  <int> NA, NA, NA, 1, NA, 0, 6, NA, NA, NA, NA, NA, NA, 3...
+## $ Alcohol12PlusYr  <fct> Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, Yes...
+## $ AlcoholDay       <int> NA, NA, NA, NA, 2, NA, NA, 3, 3, 3, 1, 2, 6, NA, N...
+## $ AlcoholYear      <int> 0, 0, 0, NA, 20, NA, NA, 52, 52, 52, 100, 104, 364...
+## $ SmokeNow         <fct> No, No, No, NA, Yes, NA, NA, NA, NA, NA, No, NA, N...
+## $ Smoke100         <fct> Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, Yes, N...
+## $ Smoke100n        <fct> Smoker, Smoker, Smoker, NA, Smoker, NA, NA, Non-Sm...
+## $ SmokeAge         <int> 18, 18, 18, NA, 38, NA, NA, NA, NA, NA, 13, NA, NA...
+## $ Marijuana        <fct> Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, NA,...
+## $ AgeFirstMarij    <int> 17, 17, 17, NA, 18, NA, NA, 13, 13, 13, NA, 19, 15...
+## $ RegularMarij     <fct> No, No, No, NA, No, NA, NA, No, No, No, NA, Yes, Y...
+## $ AgeRegMarij      <int> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20, 15...
+## $ HardDrugs        <fct> Yes, Yes, Yes, NA, Yes, NA, NA, No, No, No, No, Ye...
+## $ SexEver          <fct> Yes, Yes, Yes, NA, Yes, NA, NA, Yes, Yes, Yes, Yes...
+## $ SexAge           <int> 16, 16, 16, NA, 12, NA, NA, 13, 13, 13, 17, 22, 12...
+## $ SexNumPartnLife  <int> 8, 8, 8, NA, 10, NA, NA, 20, 20, 20, 15, 7, 100, N...
+## $ SexNumPartYear   <int> 1, 1, 1, NA, 1, NA, NA, 0, 0, 0, NA, 1, 1, NA, NA,...
+## $ SameSex          <fct> No, No, No, NA, Yes, NA, NA, Yes, Yes, Yes, No, No...
+## $ SexOrientation   <fct> Heterosexual, Heterosexual, Heterosexual, NA, Hete...
+## $ PregnantNow      <fct> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+\end{verbatim}
+
+\hypertarget{create-a-subset-dataset-of-nhanes}{%
+\subsection{Create a subset dataset of
+NHANES}\label{create-a-subset-dataset-of-nhanes}}
+
+SELECT
+
+\hypertarget{make-a-summary-table-by-gender}{%
+\subsection{Make a summary table by
+gender}\label{make-a-summary-table-by-gender}}
+
+This is the Table 1.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\textbf{Characteristic} & \textbf{female}, N = 5,020 & \textbf{male}, N
+= 4,980\tabularnewline
+\midrule
+\endhead
+\textbf{Age} & 37 (18, 56) & 36 (17, 53)\tabularnewline
+\textbf{Race1} & &\tabularnewline
+Black & 614 (12\%) & 583 (12\%)\tabularnewline
+Hispanic & 320 (6.4\%) & 290 (5.8\%)\tabularnewline
+Mexican & 452 (9.0\%) & 563 (11\%)\tabularnewline
+White & 3,221 (64\%) & 3,151 (63\%)\tabularnewline
+Other & 413 (8.2\%) & 393 (7.9\%)\tabularnewline
+\textbf{SmokeNow} & 638 (46\%) & 828 (46\%)\tabularnewline
+Unknown & 3,618 & 3,171\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{histogram-age-by-gender}{%
+\subsection{Histogram age by gender}\label{histogram-age-by-gender}}
+
+\includegraphics{05_files/figure-latex/unnamed-chunk-18-1.pdf} \#\#
+Point age and BMI by race and Gender
+
+\includegraphics{05_files/figure-latex/unnamed-chunk-19-1.pdf}
+
+\hypertarget{create-new-var}{%
+\subsection{Create new var}\label{create-new-var}}
+
+hypertension
+
+Based on syst or diast Prevalent hypertension in National Health and
+Nutrition Examination Surveys (NHANES) is traditionally defined as blood
+pressure (BP) ≥140 mmHg systolic and/or ≥90 diastolic
+
+\begin{verbatim}
+## # A tibble: 10,000 x 18
+##    Gender   Age Race1 Education MaritalStatus HHIncomeMid Weight Height   BMI
+##    <fct>  <int> <fct> <fct>     <fct>               <int>  <dbl>  <dbl> <dbl>
+##  1 male      34 White High Sch~ Married             30000   87.4   165.  32.2
+##  2 male      34 White High Sch~ Married             30000   87.4   165.  32.2
+##  3 male      34 White High Sch~ Married             30000   87.4   165.  32.2
+##  4 male       4 Other <NA>      <NA>                22500   17     105.  15.3
+##  5 female    49 White Some Col~ LivePartner         40000   86.7   168.  30.6
+##  6 male       9 White <NA>      <NA>                87500   29.8   133.  16.8
+##  7 male       8 White <NA>      <NA>                60000   35.2   131.  20.6
+##  8 female    45 White College ~ Married             87500   75.7   167.  27.2
+##  9 female    45 White College ~ Married             87500   75.7   167.  27.2
+## 10 female    45 White College ~ Married             87500   75.7   167.  27.2
+## # ... with 9,990 more rows, and 9 more variables: BPSys1 <int>, BPDia1 <int>,
+## #   DirectChol <dbl>, TotChol <dbl>, Diabetes <fct>, SleepHrsNight <int>,
+## #   PhysActiveDays <int>, SmokeNow <fct>, HardDrugs <fct>
+\end{verbatim}
+
+\hypertarget{calculate-mean-weight-and-sd-by-race-only-in-people-over-18-years-old}{%
+\subsection{calculate mean weight and sd by race only in people over 18
+years
+old}\label{calculate-mean-weight-and-sd-by-race-only-in-people-over-18-years-old}}
+
+\hypertarget{calculate-age-mean-by-race-and-age}{%
+\subsection{Calculate age mean by race and
+age}\label{calculate-age-mean-by-race-and-age}}
+
+\hypertarget{count}{%
+\subsection{Count!}\label{count}}
+
+\begin{verbatim}
+## # A tibble: 5 x 2
+##   Race1        n
+##   <fct>    <int>
+## 1 Black     1197
+## 2 Hispanic   610
+## 3 Mexican   1015
+## 4 White     6372
+## 5 Other      806
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 10 x 3
+## # Groups:   Gender [2]
+##    Gender Race1        n
+##    <fct>  <fct>    <int>
+##  1 female Black      614
+##  2 female Hispanic   320
+##  3 female Mexican    452
+##  4 female White     3221
+##  5 female Other      413
+##  6 male   Black      583
+##  7 male   Hispanic   290
+##  8 male   Mexican    563
+##  9 male   White     3151
+## 10 male   Other      393
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 5 x 3
+##   Race1    female  male
+##   <fct>     <int> <int>
+## 1 Black       614   583
+## 2 Hispanic    320   290
+## 3 Mexican     452   563
+## 4 White      3221  3151
+## 5 Other       413   393
+\end{verbatim}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\textbf{Characteristic} & \textbf{female}, N = 5,020 & \textbf{male}, N
+= 4,980\tabularnewline
+\midrule
+\endhead
+Race1 & &\tabularnewline
+Black & 614 (12\%) & 583 (12\%)\tabularnewline
+Hispanic & 320 (6.4\%) & 290 (5.8\%)\tabularnewline
+Mexican & 452 (9.0\%) & 563 (11\%)\tabularnewline
+White & 3,221 (64\%) & 3,151 (63\%)\tabularnewline
+Other & 413 (8.2\%) & 393 (7.9\%)\tabularnewline
+\bottomrule
+\end{longtable}
+
+\includegraphics{05_files/figure-latex/unnamed-chunk-25-1.pdf}
+\includegraphics{05_files/figure-latex/unnamed-chunk-26-1.pdf}
+
+\includegraphics{05_files/figure-latex/unnamed-chunk-27-1.pdf}
+
+\includegraphics{05_files/figure-latex/unnamed-chunk-28-1.pdf}
+
+\end{document}

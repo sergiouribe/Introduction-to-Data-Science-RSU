@@ -1,0 +1,202 @@
+---
+title: "Lasma dataset"
+output:
+  html_notebook: default
+  pdf_document: default
+  word_document: default
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(
+  message = F, 
+  warning = F
+)
+```
+
+
+# Load some packages
+
+```{r}
+
+pacman::p_load(tidyverse, 
+               sjPlot)
+
+
+```
+Load the dataset
+```{r}
+df <- read_csv("https://j.mp/2JJYkeN")
+```
+
+Explore the dataset
+
+```{r}
+head(df)
+```
+
+# Exploratory data analysis
+
+```{r}
+glimpse(df)
+```
+Some thoughts: 
+Year should be integer or factor
+
+
+Check the amount of NA data
+
+For this I will use the visdat package
+
+```{r}
+pacman::p_load(visdat)
+```
+
+and plot
+```{r}
+df %>% 
+  visdat::vis_dat()
+```
+Lot of NAs...
+
+Let's check some variables
+
+```{r}
+table(df$Gender)
+```
+```{r}
+table(df$`Power position`)
+```
+
+```{r}
+table(df$Gender, df$`Power position`)
+```
+Seems to me that the data are divided in 
+
+_demographic data_
+
+ [1] "RespondentID"           "Power position"         "Participation"          "Year"                   "Gender"                
+  [6] "Language"               "Parties"                "YearsMP"                "Chairman"               "Specialisation"        
+ [11] "8.LETA/BNS"    
+ 
+_Some questions about use of social media_
+
+"Monitoring"             "Oft_radio_TV"           "Oft_newspaper"          "Oft_publication"       
+ [16] "FB"                     "draugiem.lv"            "Instagram"              "vkontakte"              "Odnoklassniki"         
+ [21] "Twitter"                "dont_use" 
+ 
+ _some perceptions about their utility_
+ 
+ 
+ the rest of the columns
+ 
+ 
+ We can use an special package to create summary table ready for publication, it's called gtsummary
+ 
+```{r}
+pacman::p_load(gtsummary)
+```
+
+Learn about the package here: https://github.com/ddsjoberg/gtsummary
+
+For example, a table of the demographic data by power position would be: 
+
+
+```{r}
+df %>% 
+  select(`Power position`:Specialisation) %>%  # here I select the desired columns to summarize
+  gtsummary::tbl_summary(by = `Power position`)
+```
+As you can see, there is _a lot_ of data to clean here. 
+
+I _strongly suggest_ you to learn two of the tidyverse packages: 
+
+https://stringr.tidyverse.org/
+
+https://forcats.tidyverse.org/
+
+
+
+# Questions
+
+What are MPs perception on media power compared to other actors (Columns Agenda_TV_radio and Agenda_written_press compared to Agenda_prime; Agenda_ministers; Agenda_MP; Agenda_parties; Agenda_interest_groups). The survey was in Likert scale 1 - 5);
+
+I don't have much experience with this, so I google: 
+https://www.google.com/search?q=lickert+data+r&oq=lickert+data+r&aqs=chrome..69i57.7470j0j1&sourceid=chrome&ie=UTF-8
+
+
+I will subset the dataset, selecting some columns only
+
+```{r}
+mydf <- df %>% 
+  select(Journalists_indep:Agenda_written_press)
+```
+
+
+after googling some _hours_ found some packages that can help to analyze Likert data
+
+```{r}
+
+mydf %>% 
+  sjPlot::plot_likert() 
+```
+Please, read the documentation and options of the package here: 
+https://cran.r-project.org/web/packages/sjPlot/sjPlot.pdf
+
+
+Also you can order by some options, see page 25, the option sort.frq = from the plot_likert function
+
+```{r}
+mydf %>%
+  sjPlot::plot_likert(sort.frq = "pos.asc" )  # see page 25
+```
+and you can create different plot for different groups, for example for men and women
+
+```{r}
+df %>%
+  filter(Gender == "Man") %>% # filter only men
+  select(Agenda_ministers:Agenda_written_press) %>% # and these range of columns
+  sjPlot::plot_likert()  # see page 25
+```
+
+
+```{r}
+df %>%
+  filter(Gender == "Woman") %>% # filter only men
+  select(Agenda_ministers:Agenda_written_press) %>% # and these range of columns
+  sjPlot::plot_likert()  # see page 25
+```
+
+
+:)
+
+
+
+
+
+
+# Learn more
+
+learn about the sjPlot  package here: 
+
+https://strengejacke.github.io/sjPlot/
+
+
+
+# Learn even more!
+
+Check the survey package, specially designed to analyze data from surveys
+
+http://r-survey.r-forge.r-project.org/survey/
+
+since is quite an old package, there is a tool that allows you to work with dplyr from tidyverse package: 
+
+https://github.com/gergness/srvyr
+
+
+
+
+

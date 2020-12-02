@@ -1,0 +1,442 @@
+---
+title: "R Notebook"
+output:
+  pdf_document: default
+  html_notebook: default
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r}
+pacman::p_load(tidyverse, 
+               gtsummary, 
+               janitor, 
+               NHANES, 
+               palmerpenguins)
+```
+
+# Recapitulation
+
+## Data exploration
+
+```{r}
+head(penguins)
+```
+```{r}
+summary(penguins)
+```
+
+### Explore NA
+
+```{r}
+pacman::p_load(visdat)
+```
+
+```{r}
+penguins %>% 
+  visdat::vis_dat()
+```
+
+
+### Data visualization
+
+#### Points
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() 
+```
+
+##### Add layers
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  aes(color = sex) 
+```
+
+##### Facetting
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  aes(color = sex) + 
+  facet_wrap(~ species)
+```
+
+### One variable continuous
+
+```{r}
+penguins %>%
+  filter(species == "Adelie") %>%
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g)) +
+  geom_histogram(bins = 12) +
+  facet_grid(sex ~ .) + 
+  labs(
+    title = "Adelie body mass", 
+    x = "g", 
+    y = "Count"
+  )
+```
+Change theme
+
+```{r}
+penguins %>%
+  filter(species == "Adelie") %>%
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g)) +
+  geom_histogram(bins = 12) +
+  facet_grid(sex ~ .) + 
+  labs(
+    title = "Adelie body mass", 
+    x = "g", 
+    y = "Count"
+  ) + 
+  theme_minimal()
+```
+```{r}
+pacman::p_load(ggthemes)
+```
+
+```{r}
+penguins %>%
+  filter(species == "Adelie") %>%
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g)) +
+  geom_histogram(bins = 12) +
+  facet_grid(sex ~ .) + 
+  labs(
+    title = "Adelie body mass", 
+    x = "g", 
+    y = "Count"
+  ) + 
+  theme_minimal() + 
+  ggthemes::theme_economist()
+```
+
+### Two variables continuous
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  aes(color = sex) 
+```
+#### Explore correlations
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = bill_depth_mm)) + 
+  geom_point() + 
+  aes(color = sex) +
+  facet_grid(sex ~ species) + 
+  geom_smooth()
+```
+
+### Two variables continuous vs nominal
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  ggplot(aes(x = species, 
+             y = body_mass_g, 
+             fill = species)) + 
+  geom_boxplot()
+```
+
+### Trends
+
+```{r}
+gapminder <- gapminder::gapminder
+```
+
+```{r}
+head(gapminder)
+```
+First, revise DATA WRANGLING
+
+## Data Wrangling
+
+### Filter
+
+```{r}
+gapminder %>% 
+  filter(country == "Germany")
+```
+```{r}
+gapminder %>% 
+  filter(continent == "Europe" & year == 2007)
+```
+
+
+### Select
+```{r}
+gapminder %>% 
+  select(continent, year, lifeExp)
+```
+
+### Group_by
+
+```{r}
+gapminder %>% 
+  group_by(continent, year)
+```
+
+
+### Summarize
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(LifeExpMean = mean(lifeExp))
+```
+```{r}
+pen
+```
+
+
+### Pivoting
+
+```{r}
+unicef <- read_csv("https://bit.ly/unicef-wide")
+```
+```{r}
+head(unicef)
+```
+
+Clean the names
+```{r}
+unicef <- unicef %>% 
+  janitor::clean_names()
+```
+
+
+
+
+
+#### Longer
+
+```{r}
+unicef %>% 
+  pivot_longer(u5mr_1950:u5mr_2015, 
+               names_to = "year", 
+               values_to = "values")
+```
+`
+Save a new dataframe
+
+```{r}
+unicef_long <- unicef %>% 
+  pivot_longer(u5mr_1950:u5mr_2015, 
+               names_to = "year", 
+               values_to = "values")
+```
+
+filter some countries
+
+
+
+```{r}
+unicef_long %>% 
+  filter(country_name %in% c("Latvia", "Lithuania", "Estonia")) %>% 
+  ggplot(aes(x = year, 
+             y = values, 
+             color = country_name)) + 
+  geom_point()
+```
+
+```{r}
+unicef_long %>% 
+  filter(country_name %in% c("Latvia", "Lithuania", "Estonia")) %>% 
+  ggplot(aes(x = year, 
+             y = values, 
+             color = country_name)) + 
+  geom_line()
+```
+
+```{r}
+unicef_long %>% 
+  filter(country_name %in% c("Latvia", "Lithuania", "Estonia")) %>% 
+  ggplot(aes(x = year, 
+             y = values, 
+             color = country_name, 
+             group = country_name)) + 
+  geom_line()
+```
+
+#### Wider
+
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(LifeExpMean = mean(lifeExp))
+```
+```{r}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(LifeExpMean = mean(lifeExp)) %>% 
+  pivot_wider( names_from = year, 
+               values_from = LifeExpMean)
+```
+```{r}
+gapminder %>% 
+  filter(year %in% c(1952, 1972, 1992, 2002)) %>% 
+  group_by(continent, year) %>% 
+  summarise(LifeExpMean = mean(lifeExp)) %>% 
+  pivot_wider( names_from = year, 
+               values_from = LifeExpMean)
+```
+
+
+### Join datasets
+
+
+Data from 
+
+Short
+https://datahub.io/core/country-list
+
+Full
+https://datahub.io/JohnSnowLabs/country-and-continent-codes-list#resource-country-and-continent-codes-list-csv
+
+
+```{r}
+countries_short <- read_csv("https://pkgstore.datahub.io/core/country-list/data_csv/data/d7c9d7cfb42cb69f4422dec222dbbaa8/data_csv.csv")
+
+
+countries_list <- read_csv("https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/r/country-and-continent-codes-list-csv.csv")
+```
+```{r}
+head(countries_short)
+```
+
+Lets merge
+First try
+```{r}
+left_join(unicef, countries_short, by = c("country_name" = "Name")) 
+```
+
+
+if ok, proceed
+```{r}
+unicef <- left_join(unicef, countries_short, by = c("country_name" = "Name")) 
+```
+
+```{r}
+head(unicef)
+```
+
+```{r}
+unicef %>% 
+  relocate(Code, before = country_name)
+```
+```{r}
+unicef <- unicef %>% 
+  relocate(Code, before = country_name)
+```
+
+
+```{r}
+head(unicef)
+```
+
+
+now add the continent
+
+```{r}
+head(countries_list)
+```
+
+
+```{r}
+left_join(unicef, countries_list, by = c("Code" = "Two_Letter_Country_Code" )) 
+```
+
+```{r}
+unicef <- left_join(unicef, countries_list, by = c("Code" = "Two_Letter_Country_Code" )) 
+```
+
+
+```{r}
+names(unicef)
+```
+
+
+remove the unused dataframes
+
+```{r}
+rm(countries_list, countries_short)
+```
+
+
+```{r}
+unicef %>% 
+  relocate(Continent_Name, before = country_name)
+```
+```{r}
+unicef <- unicef %>% 
+  relocate(Continent_Name, before = country_name)
+```
+
+
+
+```{r}
+unicef_long <- unicef %>% 
+  pivot_longer(u5mr_1950:u5mr_2015, 
+               names_to = "year", 
+               values_to = "values")
+```
+
+```{r}
+head(unicef_long)
+```
+Create a simplified dataset
+```{r}
+unicef_long %>%
+  select(Continent_Name,
+         country_name,
+         year,
+         values)
+```
+store
+
+```{r}
+unicef_long <- unicef_long %>%
+  select(Continent_Name,
+         country_name,
+         year,
+         values)
+```
+
+
+### Separate
+```{r}
+unicef_long %>% 
+  separate(year, into = c("etc", "year"),  sep = "_")
+```
+```{r}
+unicef_long <- unicef_long %>% 
+  separate(year, into = c("etc", "year"),  sep = "_")
+```
+
+```{r}
+head(unicef_long)
+```
+
+## Split combine apply
+
+```{r}
+unicef_long %>% 
+  group_by(coni)
+```
+
