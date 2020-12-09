@@ -1,0 +1,448 @@
+---
+title: "Example Final Seminar"
+author: "Sergio Uribe"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    code_download: yes
+  html_notebook:
+    toc: yes
+    toc_float: yes
+    fig_caption: yes
+always_allow_html: true
+  
+---
+
+# Aim
+This is a sample seminar about the final work that each one should present. 
+
+The objective of the seminar is to demonstrate your skills in performing an exploratory analysis.
+
+The minimum elements that the seminar should have include 
+
++ pose a question that can be answered with data
++ load data into R, ideally from an online source
++ load r packages
++ comment in detail all the code
++ explore the data
++ identify tabulated data in tidy format
++ identify the location and proportion of null data in the dataset
++ create one or more summary tables
++ Create one or more exploratory graphics
++ Data wrangling: Apply one or more of these commands: filter, select, mutate, pivot
++ answer the question posed with a correctly formatted graphic
++ generate a codebook using the reporteR package (or dataMaid if reporteR is not available yet)
++ use the rmarkdown format to integrate text and code
++ export the document together with the code to a pdf or doc file
+
+
+## Minimum code must include
++ Packages
+  + pacman::p_load()
++ Data import
+  + read_csv()
++ Data exploration
+  + head()
+  + summary()
+  + dim()
++ Data wrangling
+  + %>% 
+  + filter()
+  + select()
+  + mutate()
+  + group_by()
+  + summarize()
++ Tables
+  + gtsummary::tbl_summary()
++ Graphs
+  + ggplot()
++ Codebook
+  + dataMaid::codebook()
+
+
+Extra points: 
+
+ + use packages that we haven't seen in classes
+ + use join_
+ + use log10 transformations for axes
+
+
+Below is a sample seminar. Your code may be more or less than the example, there is no maximum or minimum. The important thing is that: 
+
+ + you must use the minimum commands listed before, 
+ + you must comment most of your code to document the steps of your analysis and 
+ + you must export your code script to a pdf or docx document (go to Preview Notebook tab and select the format to export, detailed instructions [here](https://rmarkdown.rstudio.com/lesson-9.html))
+
+
+**IMPORTANT: Your code should be executable**
+
+## Some recommendations
+
+Write clear code (select code, CTRL+SHIFT+A): it will help you when something doesn't work
+
+In case something doesn't work, don't despair, that happens to everyone, beginners and advanced. The important thing is to be able to detect the error. In case some error message appears, I suggest you first verify that your code doesn't have some obvious error (like some orphan parenthesis, a period instead of a comma, etc) and if the error persists, copy and paste the error message in google to find out the solution. 
+
+Remember: there is no problem that cannot be solved without the proper use of google or a hammer!
+
+# SEMINAR EXAMPLE
+
+## Question
+
+__What's the birth rate for european countries and for continents and What is the birth rate for the Baltic countries?__
+
+
+
+## Packages
+
+```{r}
+# install the pacman package if is not installed previously, uncomment next line
+
+# install.packages("pacman")
+
+pacman::p_load(tidyverse, # several packages for data science
+               visdat,  # to visualize NAs
+               gtsummary, # for nice tables
+               dataMaid, # for the codebook
+               janitor) # for data cleaning
+```
+
+## Dataset
+
+Found in the World Bank data
+
+https://data.worldbank.org/indicator/SP.DYN.CBRT.IN
+Found the Birth rate, crude (per 1,000 people)
+Is in zip format, I created a copy online in google drive, published as a csv file and imported into R
+I will call my dataset as df for Data Frame
+
+```{r}
+df <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vStv7Pr69DtRKv6Nw6gVBep8hbT3pEeO6B1vNwxK_1DUHgpoTgbuRpZ4SvgtHFQnBZJVGeeQVyRuXZl/pub?gid=473966571&single=true&output=csv")
+```
+## Data cleaning
+
+```{r}
+head(df)
+```
+Seems that there are some extra rows at the top of the dataset. I will re-read, adding the option to skip those rows
+
+```{r}
+df <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vStv7Pr69DtRKv6Nw6gVBep8hbT3pEeO6B1vNwxK_1DUHgpoTgbuRpZ4SvgtHFQnBZJVGeeQVyRuXZl/pub?gid=473966571&single=true&output=csv", 
+               skip = 4) # add the option to skip 4 rows when importing the file
+```
+
+Now it's ok
+
+
+I will standardize the names to facilitate handling
+
+```{r}
+df <- df %>%              # create a new dataset with the former, dataset
+  janitor::clean_names()  # and clean all the names
+  
+```
+
+the last two columns are empty, so I will delete it
+
+```{r}
+df <- df %>% 
+  select(-x2019,  # here I unselect these columns
+         -x2020)
+```
+
+
+## Data wrangling
+
+
+Check the dimensions
+
+```{r}
+dim(df)
+```
+Check the variables included
+
+```{r}
+glimpse(df)
+```
+
+Check the content of some variables with simple tables
+```{r}
+table(df$indicator_name)
+```
+```{r}
+table(df$indicator_code)
+```
+So, both columns are keys, that is some constant and not variables, so I will delete it
+
+```{r}
+df <- df %>% 
+  select(-indicator_name, 
+         -indicator_code)
+```
+
+Check
+
+```{r}
+summary(df)
+```
+
+
+## Reshaping
+
+Ok, dataset is in wide format, hence I will reshape it into long format
+
+```{r}
+df %>% 
+  pivot_longer(x1960:x2018, 
+               names_to = "year", 
+               values_to = "value")
+```
+
+Correct, hence I will store as a new dataframe
+Since I will not use the wide, I will rewrite it
+```{r}
+df <- df %>% 
+  pivot_longer(x1960:x2018, 
+               names_to = "year", 
+               values_to = "value")
+```
+
+Now I will fix the year column
+from this: 
+```{r}
+head(df$year)
+```
+```{r}
+df <- df %>% 
+  mutate(year = str_sub(year, 2)) # remove the x
+```
+
+
+
+## Join
+
+Now we need a row for continent. SInce I have a tree code country column, googled "three code country continent csv" and found a csv with the three code to match and the continent.
+
+Found a file here: https://datahub.io/JohnSnowLabs/country-and-continent-codes-list
+
+```{r}
+continents <- read_csv("https://datahub.io/JohnSnowLabs/country-and-continent-codes-list/r/country-and-continent-codes-list-csv.csv")
+```
+So I will select only the relevant columns, Three_Letter_Country_Code and Continent_Name
+
+```{r}
+continents <- continents %>% 
+  select(Three_Letter_Country_Code, Continent_Name)
+```
+Check
+
+```{r}
+head(continents)
+```
+Now try to join
+
+```{r}
+left_join(df, continents, 
+          by = c("country_code" = "Three_Letter_Country_Code"))
+```
+Works!, so let's join
+```{r}
+df  <- left_join(df, continents, 
+          by = c("country_code" = "Three_Letter_Country_Code"))
+```
+
+and delete the continents dataframe
+
+```{r}
+rm(continents)
+```
+
+Finally, change the year for date format
+
+This was _tricky_, finally found the answer here: 
+https://stackoverflow.com/questions/30255833/convert-four-digit-year-values-to-a-date-type
+
+
+
+```{r}
+df <- df %>% 
+  mutate(year = as.Date(as.character(year), format = "%Y")) 
+```
+
+
+
+So, dataset ready for analysis!
+
+## Exploratory data analysis 
+```{r}
+head(df)
+```
+
+How many countries?
+
+```{r}
+df %>%  
+  distinct(country_name) # check unique values in one specified column
+```
+ok, we have 264 countries, from
+
+```{r}
+df %>% 
+  distinct(Continent_Name)
+```
+### Check the NAs values
+
+```{r}
+df %>% 
+  visdat::vis_dat() # visualize the variables and NAs from a dataset
+```
+Check in more detail the NAs from continents: 
+
+```{r}
+df %>% 
+  filter(is.na(Continent_Name)) %>%  # filter the NAs values from the Continent_name column
+  distinct(country_name)
+```
+ok, there are some values, I will remove all of them and leave only the countries
+
+```{r}
+df <- df %>% 
+  filter(!is.na(Continent_Name)) # here the ! makes the trick, means "Is not NA"
+```
+
+check again
+
+```{r}
+df %>% 
+  visdat::vis_dat()
+```
+there are some NAs values, let's find them
+```{r}
+df %>% 
+  filter(is.na(value))
+```
+ok, again, remove, now I will use drop_na
+
+```{r}
+df <- df %>% 
+  drop_na(value)
+```
+
+
+### What is the average birth rate per year?
+Check the average change in the birth rate 
+
+```{r}
+df %>% 
+  group_by(year) %>%  # group by year
+  summarise(average_birth_rate = mean(value)) %>% # now calculate the mean for each year
+  ggplot(aes(x = year, 
+             y = average_birth_rate)) + 
+  geom_line(group = 1) +  # since there is only one point per year, I say here "use the points and merge it"
+  labs(title = "Average Birth Rate per 1000", 
+       subtitle = "Source: World Bank", 
+       x = "Year", 
+       y = "Average Birth Rate per 1000 inhabs.") + 
+  theme_minimal()   # this use the theme minimal
+
+```
+
+### What is the average birth rate per year and continent?
+
+```{r}
+df %>% 
+  group_by(Continent_Name, year) %>% 
+  summarise(average_birth_rate = mean(value)) %>% 
+  ggplot(aes(x = year, 
+             y = average_birth_rate, 
+             color = Continent_Name)) + 
+  geom_line() +  
+  labs(title = "Average Birth Rate per 1000 per Continent", 
+       subtitle = "Source: World Bank", 
+       x = "Year", 
+       y = "Average Birth Rate per 1000 inhabs.", 
+       color = "Continent") + 
+  theme_minimal()   # this use the theme minimal
+
+```
+
+Check each country individually
+
+```{r}
+df %>% 
+  ggplot(aes(x = year, 
+             y = value, 
+             group = country_name)) + 
+  geom_line() + 
+  facet_wrap(~Continent_Name)
+```
+### What is the average birth rate per year for the Baltic countries?
+We will focus on the Baltic countries
+
+```{r}
+df %>% 
+  filter(country_name %in% c("Latvia", "Estonia", "Lithuania")) %>%  # Select only the three baltic countries
+   ggplot(aes(x = year, 
+             y = value, 
+             group = country_name,  
+             color = country_name)) + 
+  geom_line() + 
+  facet_grid(country_name~.) + # order the facet with the countries in three rows. Try changing to (. ~ country_name)
+  theme_minimal() + 
+  labs(
+    title = "Birth rate per 1000 inhab for Baltic Countries", 
+    subtitle = "Data Source: World Bank", 
+    x = "Year", 
+    y = "Birth rate per 1000 inhabs", 
+    color = "Country"
+  )
+```
+
+## Tables
+
+I will calculate the change in birth rate from 1988 to 2018 for european countries and create a table. 
+
+I will use a new package, "DT". The documentation is here: https://rstudio.github.io/DT/
+
+```{r}
+pacman::p_load(DT)
+```
+
+```{r}
+df %>%
+  select(-country_code) %>%  #unselect this column, since is useless
+  filter(Continent_Name == "Europe") %>%   # filter only european countries
+  select(-Continent_Name) %>%  # and now unselect this useless column
+  # convert the date from YYYYMMDD format to YYYY 
+  mutate(year = lubridate::year(year)) %>% 
+  filter(year == "1988" |
+           year == "2018")  %>% 
+  # now convert to wide format to calculate the difference
+  pivot_wider(names_from = year, 
+              values_from = value)  %>%
+  # change the name of the columns
+  rename( "x1988" = "1988", 
+          "x2018" = "2018") %>% 
+  # now calculate the difference
+  mutate("Difference in birth rate per 1000 inhabs. 1988-2018" = x2018 - x1988) %>% # create a new variable with the difference of the birth rate per 1000
+  # filter only rows with values
+  drop_na() %>% 
+  # round numbers
+  mutate_if(is.numeric, round, 1) %>% 
+  # create a nice table
+  select(country_name, "Difference in birth rate per 1000 inhabs. 1988-2018") %>% 
+  # and now the table, copy and paste from the documentation
+  datatable()
+```
+
+
+## Create a codebook
+
+Use the dataMaid package
+
+uncomment the next line to generate a codebook
+
+```{r}
+# dataMaid::makeCodebook(df)
+```
+This command create a codebook in PDF format.

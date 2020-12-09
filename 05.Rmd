@@ -26,6 +26,11 @@ pacman::p_load(tidyverse, # for data science
                gtsummary) # for tables
 ```
 
+```{r}
+scale_y_log10()
+```
+
+
 # Data entry
 
 Best practice: separate the data entry process and keep a copy of the raw data. 
@@ -178,6 +183,46 @@ miniNHANES %>%
   geom_point() + 
   facet_grid(Gender~Race1)
 ```
+
+Add a regression line
+
+```{r}
+miniNHANES %>% 
+  ggplot(aes(x = Age, 
+             y = BMI, 
+             color = Race1)) +
+  geom_point() + 
+  facet_grid(Gender~Race1) + 
+  geom_smooth() # this is the regression line
+```
+
+
+But wait, where's the regression line?
+It's hidden below all the points, so we must change the transparency of the points
+
+
+```{r}
+miniNHANES %>% 
+  ggplot(aes(x = Age, 
+             y = BMI, 
+             color = Race1)) +
+  geom_point(alpha = .1) +  # alpha controls the transparency
+  facet_grid(Gender~Race1) + 
+  geom_smooth() # this is the regression line
+```
+If we want a polynomial regression, we can change the equation
+
+```{r}
+miniNHANES %>% 
+  ggplot(aes(x = Age, 
+             y = BMI, 
+             color = Race1)) +
+  geom_point(alpha = .1) +  # alpha controls the transparency
+  facet_grid(Gender~Race1) + 
+  geom_smooth(method='lm', formula = y~poly(x,2)) # this is the regression line
+```
+
+
 
 ## Create new var
 

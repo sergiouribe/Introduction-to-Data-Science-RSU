@@ -387,7 +387,19 @@ penguins %>%
   head()
 ```
 
-The grammar of graphics
+### The grammar of graphics
+
+#### Grammar of Graphics and Conventions
+Hadley Wickham’s ggplot2 is based on Leland Wilkinson’s The Grammar of Graphics and Wickham’s A Layered Grammar of Graphics. The layered grammar of graphics is a structured way of thinking about the components of a plot, which then lend themselves to the simple structure of ggplot2.
+
+ + Data are what are visualizaed in a plot and mappings are directions for how data are mapped in a plot in a way that can be perceived by humans.
+ + Geoms are representations of the actual data like points, lines, and bars.
+Stats are statistical transformations that represent summaries of the data like histograms.
+ + Scales map values in the data space to values in the aesthetic space. Scales draw legends and axes.
+ + Coordinate Systems describe how geoms are mapped to the plane of the graphic.
+ + Facets break the data into meaningful subsets like small multiples.
+ + Themes control the finer points of a plot such as fonts, font sizes, and background colors.
+
 
 ```{r}
 penguins %>% 

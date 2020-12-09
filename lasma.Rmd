@@ -1,0 +1,133 @@
+---
+title: "Lasma"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+Packages
+
+```{r}
+pacman::p_load(tidyverse, 
+               janitor, 
+               visdat, 
+               gtsummary)
+```
+
+# Dataset
+```{r}
+df <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTaTrujjc9aB_Q_eaGMewz20aH754r055zJ6rNb-sGy8gmehP1KkghtAiZ2DjycztaO1V7xOCdkpNAY/pub?gid=0&single=true&output=csv", 
+               na = c("na"))
+```
+
+
+```{r}
+head(df)
+```
+```{r}
+df <- df %>% 
+  janitor::clean_names()
+```
+
+
+Create a new ID column
+
+```{r}
+df <- df %>% 
+  rowid_to_column("id")
+```
+
+
+
+
+Reformat the dataset
+
+```{r}
+df_long <- df %>% 
+  pivot_longer(fb:dont_use, 
+               names_to = "social_media", 
+               values_to = "answer")
+```
+
+
+# DATA EXPLORATION
+
+```{r}
+df %>% 
+  drop_na() %>% 
+  # group_by(id) %>%
+  select(power_position, 
+         gender, 
+         fb:dont_use) %>% 
+  gtsummary::tbl_summary(by = power_position) %>% 
+  gtsummary::add_p()
+```
+
+```{r}
+df_long %>% 
+  drop_na() %>% 
+  ggplot(aes(x = social_media, 
+             fill = answer)) + 
+  geom_bar(position="fill") + 
+  facet_grid(power_position~.) +
+  theme_minimal() +
+  labs(
+    title = "Use of social media by power position", 
+    x = "Social media", 
+    y = "Percentage", 
+    fill = "Answer"
+  ) +
+    scale_y_continuous(labels = scales::percent)
+```
+
+
+
+# Perceptions about tv
+
+So, there are some questions about what they think about russian and latvian television
+
+```{r}
+df %>% 
+  drop_na() %>% 
+  # select only relevant columns
+  select(respondent_id:parties, 
+         lv_unbiased:ru_trustworhy) %>%
+  # convert from wide to long
+  pivot_longer(lv_unbiased:ru_trustworhy, 
+               names_to = "question", 
+               values_to = "answer") %>%
+  # split the question in two columns
+  separate(question, 
+           into = c("lv_or_ru", "question")) %>% 
+  # fix some wrong values
+  mutate(question = recode(question, "trustworhy" = "trustworthy", "comp" = "complete")) %>%  # change the format of the asnwer
+  mutate(answer = as.factor(answer)) %>% 
+  mutate(answer = fct_relevel(answer, "1","2","3", "4")) %>% 
+  mutate(answer = fct_relevel(answer, "1", "2", "3", "4", "5")) %>% 
+  mutate(answer = recode(answer, 
+                         "1" = "Not at all", 
+                         "2" = "Not", 
+                         "3" = "No opinion", 
+                         "4" = "Yes", 
+                         "5" = "Absolutely yes")) %>%
+  # capitalize some values
+  mutate(question = str_to_title(question)) %>%
+  mutate(lv_or_ru = str_to_upper(lv_or_ru)) %>% 
+# the plot
+  ggplot(aes(x = question, 
+             fill = answer)) + 
+  geom_bar(position = "fill") +
+    scale_y_continuous(labels = scales::percent) +
+  coord_flip() +
+  facet_grid(.~lv_or_ru) + 
+  # scale_fill_brewer(palette="Set4")
+  scale_fill_manual(values = c("#EF704F", "#F29071", "#949599", "#6193CE", "#207BBE")) + 
+  labs(
+    title = "Perceptions about different speaking channels", 
+    x = "Perception", 
+    y = "Percentage", 
+    fill = "Answer"
+  ) + 
+  theme_minimal()
+```
+
