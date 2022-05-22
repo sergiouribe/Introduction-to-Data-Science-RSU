@@ -1,0 +1,276 @@
+---
+title: "Introduction to Exploratory Data Analysis"
+output: html_notebook
+---
+
+# Packages
+
+```{r}
+pacman::p_load(tidyverse, 
+               NHANES, 
+               janitor, 
+               visdat, 
+               naniar, 
+               psych, # for describe
+               sjPlot)
+```
+
+# Dataset
+
+```{r}
+data("NHANES")
+```
+
+# Explore the dataset
+
+```{r}
+head(NHANES)
+```
+
+```{r}
+tail(NHANES)
+```
+
+```{r}
+colnames(NHANES)
+```
+
+```{r}
+dim(NHANES)
+```
+
+## Missing values
+
+```{r}
+NHANES %>% 
+  naniar::miss_var_summary() %>% 
+  filter(pct_miss > 65)
+```
+
+With visdat package
+
+```{r}
+NHANES %>% 
+  visdat::vis_dat()
+```
+
+```{r}
+naniar::gg_miss_var(NHANES)
+```
+
+```{r}
+NHANES %>% 
+  gg_miss_upset()
+```
+
+Could be any influence of the missing data on certain variables?
+
+```{r}
+NHANES %>%
+  bind_shadow() %>%
+  ggplot(aes(x = Age,
+             fill = Poverty_NA)) + 
+  geom_density(alpha = 0.5)
+```
+
+```{r}
+NHANES %>%
+  select(-contains(c("Preg", "Bab"))) %>% 
+  group_by(Gender) %>%
+  miss_var_summary() %>% 
+  filter(pct_miss > 65)
+```
+
+## Data exploration
+
+```{r}
+str(NHANES)
+```
+
+Compare with glimpse
+
+```{r}
+glimpse(NHANES)
+```
+
+```{r}
+summary(NHANES)
+```
+
+```{r}
+summary(NHANES$Age)
+```
+
+```{r}
+psych::describe(NHANES)
+```
+
+# Summarizing values
+
+1.  How many variables to manipulate
+
+-   1A. single variable
+
+-   1B. more than a variable
+
+2.  How many functions to apply to each variable
+
+-   2A. single function
+
+-   2B. more than one function
+
+resulting in the following four cases:
+
+-   Case 1: apply one function to one variable
+
+-   Case 2: apply many functions to one variable
+
+-   Case 3: apply one function to many variables
+
+-   Case 4: apply many functions to many variables
+
+### **Case 1: apply one function to one variable**
+
+```{r}
+NHANES %>% 
+  summarise(mean_age = mean(Age))
+```
+
+or by gender
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(mean_age = mean(Age))
+```
+
+### **Case 2: apply many functions to one variable**
+
+```{r}
+NHANES %>% 
+  summarise(min_age = min(Age), max_age = max(Age))
+```
+
+By gender
+
+Note the na.rm = T
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(min_age = min(Pulse, na.rm = T), 
+            max_age = max(Pulse))
+```
+
+or with summarize_each
+
+```{r}
+NHANES %>% 
+  summarise(across("Age",  
+                   list(min = min, Max = max)))
+```
+
+grouping
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c(Age), 
+                   ~ mean(.x, na.rm = TRUE)))
+```
+
+Change the name of columns
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c(Age), 
+                   ~ mean(.x, na.rm = TRUE), 
+                   .names = "mean_{.col}"))
+```
+
+### **Case 3: apply one function to many variables**
+
+```{r}
+NHANES %>% 
+  summarise(mean_age = mean(Age), 
+            mean_pulse = mean(Pulse, na.rm = T))
+```
+
+grouping by gender
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(mean_age = mean(Age), 
+            mean_pulse = mean(Pulse, na.rm = T))
+```
+
+```{r}
+NHANES %>% 
+  summarise(across(c("Age", "Pulse"), 
+                   ~mean(.x, na.rm = T)))
+  
+```
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c("Age", "Pulse"), 
+                   ~mean(.x, na.rm = T)))
+```
+
+### **Case 4: apply many functions to many variables**
+
+```{r}
+NHANES %>% 
+  summarise(min_Age = min(Age) , 
+            min_Pulse = min(Pulse, na.rm = T), 
+            max_Age = max(Age) , 
+            max_Pulse = max(Pulse, na.rm = T))
+```
+
+```{r}
+NHANES %>% 
+  summarise(across(c("Age", "Pulse"), 
+                    list(mean, sd ), na.rm = T))
+```
+
+```{r}
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c("Age", "Pulse"), 
+                    list(mean, sd),
+                   # .names = "mean_{.col}", 
+                   na.rm = T))
+```
+
+## Bonus, use significant numbers
+
+```{r}
+# Packages
+require(NHANES, # the dataset
+        dplyr, 
+        magritte)
+
+# the dataset
+data(NHANES)
+
+
+# example, no errors
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c("Age", "Pulse"), 
+                    list(mean, min, max), na.rm = T)) 
+
+
+```
+
+```{r}
+# example, errors, some columns are CHR now
+NHANES %>% 
+  group_by(Gender) %>% 
+  summarise(across(c("Age", "Pulse"), 
+                    list(mean, min, max), na.rm = T)) %>% 
+  mutate(across(is.numeric, format, 1))
+```

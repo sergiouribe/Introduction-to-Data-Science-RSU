@@ -1,0 +1,100 @@
+---
+title: "Exercises"
+output: html_notebook
+---
+
+# Load the packages
+
+```{r}
+pacman::p_load(tidyverse, # several datascience packages
+               palmerpenguins, # data
+               gapminder, #data,
+               gtsummary) # for tables) 
+```
+
+If you find some error, load the pacman package: copu and paste this comand *inside* a chink of code
+
+install.packages("pacman")
+
+# A new dataset: Gapminder
+
+First: see this presentation from Hans Rosling on TED: <https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen>
+
+We will use the gapminder package, who includes the dataset
+
+```{r}
+pacman::p_load(gapminder)
+```
+
+# Exploring the gapminder dataset
+
+The command **head** show the first six rows of the dataset
+
+```{r}
+head(gapminder)
+```
+
+to check the last 6 rows, the command is tail(), so check the last six rows
+
+**task** check the last six rows of the gapminder dataset
+
+**task** Create a summary for all the dataset
+
+**task** Create a summary for the country variable
+
+**task** How many countries are in the dataset?
+
+**task** From which year to which year is data included?
+
+## Using the help
+
+Check the information available of the gapminder dataset, write
+
+?gapminder
+
+inside a chunk and run the code.
+
+What happens?
+
+(Hint: see all the frames of rstudio!)
+
+# Create summary tables
+
+**task** Using the *tbl_summary* function from the *gtsummary* package, create summary tables
+
+**task** Create a table summary by year
+
+# Data manipulation basics
+
+There are five key functions that allow you to solve the vast majority of your data manipulation challenges:
+
+-   Pick observations by their values ([`filter()`](https://rdrr.io/r/stats/filter.html)).
+
+-   Reorder the rows (`arrange()`).
+
+-   Pick variables by their names (`select()`).
+
+-   Create new variables with functions of existing variables (`mutate()`).
+
+-   Collapse many values down to a single summary (`summarise()`).
+
+## **Filter rows with `filter()`**
+
+[`filter()`](https://rdrr.io/r/stats/filter.html) allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame. For example, we can select all flights on January 1st with:
+
+Since there are many countries, lets select only Europe. This can be done with the *filter* command, as follows:
+
+```{r}
+gapminder %>% 
+  filter(continent == "Europe")
+```
+
+### **Comparisons**
+
+To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: [`>`](https://rdrr.io/r/base/Comparison.html), [`>=`](https://rdrr.io/r/base/Comparison.html), [`<`](https://rdrr.io/r/base/Comparison.html), [`<=`](https://rdrr.io/r/base/Comparison.html), [`!=`](https://rdrr.io/r/base/Comparison.html) (not equal), and [`==`](https://rdrr.io/r/base/Comparison.html) (equal).
+
+**task** filter all data from 1992 onwards
+
+**task** filter all data from Europe and 1992 onwards
+
+**task** filter all data from Germany and 2007

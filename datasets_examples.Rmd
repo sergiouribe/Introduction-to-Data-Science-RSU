@@ -1,0 +1,198 @@
+---
+title: "Datasets"
+output: html_notebook
+---
+
+First install the package that allow to manage others packages
+
+Write, inside a chunk (Insert \> Code Chunk \> R or CTRL + ALT + I)
+
+install.packages("pacman")
+
+```{r}
+pacman::p_load(tidyverse, # several datascience packages
+               gtsummary) # for tables) 
+```
+
+## Datasets
+
+```{r}
+pacman::p_load(palmerpenguins)
+```
+
+```{r}
+head(penguins)
+```
+
+```{r}
+pacman::p_load(babynames)
+```
+
+```{r}
+head(babynames)
+```
+
+```{r}
+head(mtcars)
+```
+
+```{r}
+pacman::p_load(gapminder)
+```
+
+```{r}
+head(gapminder)
+```
+
+```{r}
+pacman::p_load(coronavirus)
+```
+
+```{r}
+dim(coronavirus)
+```
+
+```{r}
+names(coronavirus)
+```
+
+```{r}
+coronavirus %>% 
+  filter(country == "Latvia")
+```
+
+```{r}
+head(esoph)
+```
+
+A data frame with records for 88 age/alcohol/tobacco combinations.
+
+| \[,1\] | "agegp"     | Age group           | 1 25--34 years |
+|-------:|:------------|:--------------------|:---------------|
+|        |             |                     | 2 35--44       |
+|        |             |                     | 3 45--54       |
+|        |             |                     | 4 55--64       |
+|        |             |                     | 5 65--74       |
+|        |             |                     | 6 75+          |
+| \[,2\] | "alcgp"     | Alcohol consumption | 1 0--39 gm/day |
+|        |             |                     | 2 40--79       |
+|        |             |                     | 3 80--119      |
+|        |             |                     | 4 120+         |
+| \[,3\] | "tobgp"     | Tobacco consumption | 1 0-- 9 gm/day |
+|        |             |                     | 2 10--19       |
+|        |             |                     | 3 20--29       |
+|        |             |                     | 4 30+          |
+| \[,4\] | "ncases"    | Number of cases     |                |
+| \[,5\] | "ncontrols" | Number of controls  |                |
+
+```{r}
+head(HairEyeColor)
+```
+
+```{r}
+head(InsectSprays)
+```
+
+```{r}
+InsectSprays %>% 
+  ggplot(aes(x = count)) +
+  geom_histogram(bins = 8) + 
+  facet_grid(spray ~. )
+```
+
+```{r}
+head(morley)
+```
+
+```{r}
+morley %>% 
+  ggplot(aes(x = Speed)) + 
+  geom_histogram(bins = 10) + 
+  facet_grid(Run ~ Expt)
+```
+
+```{r}
+summary(aov(Speed ~ Expt * Run, data =  morley))
+  
+```
+
+```{r}
+morley %>% 
+  ggplot(aes(x = as.factor(Expt), 
+             y = Speed)) + 
+  geom_boxplot() + 
+  geom_jitter(alpha = .3)
+```
+
+```{r}
+head(sleep)
+```
+
+A data frame with 20 observations on 3 variables.
+
+| \[, 1\] | extra | numeric | increase in hours of sleep |
+|--------:|:------|:--------|:---------------------------|
+| \[, 2\] | group | factor  | drug given                 |
+| \[, 3\] | ID    | factor  | patient ID                 |
+
+```{r}
+sleep %>% 
+  ggplot(aes(x = group, 
+             y = extra)) + 
+  geom_violin() + 
+  geom_jitter(alpha = .3, width = .1, color = "red") + 
+  geom_boxplot(alpha = .1, width = .25, color = "light blue")
+```
+
+## fivethirtyeightdata 
+
+```{r}
+pacman::p_load(fivethirtyeight)
+```
+
+```{r}
+head(classic_rock_raw_data)
+```
+
+## trick
+
+The chickweight dataset is the best.
+
+Don't trust me? There's something horribly wrong with that dataset. But it's hidden! Can you find it? Hint; you'll need to combine ggplot with dplyr in order to understand the pattern in it.
+
+```{r}
+pacman::p_load(ChickWeight)
+```
+
+```{r}
+head(ChickWeight)
+```
+
+```{r}
+summary(ChickWeight)
+```
+
+```{r}
+pacman::p_load(NHANES)
+```
+
+```{r}
+head(NHANES)
+```
+
+```{r}
+head(starwars)
+```
+
+```{r}
+starwars %>% 
+  group_by(species) %>% 
+  summarise(mean_mass = mean(mass)) %>% 
+  drop_na() %>% 
+  arrange(desc(mean_mass)) %>% 
+  ggplot(aes(x = fct_reorder(species, mean_mass), 
+             y = mean_mass)) + 
+  geom_col() +
+  coord_flip() + 
+  scale_y_log10()
+```

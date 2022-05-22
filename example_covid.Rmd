@@ -1,0 +1,59 @@
+---
+title: "COVID"
+author: '[Sergio Uribe](https://sergiouri.be)'
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+    code_folding: hide
+---
+
+```{r}
+pacman::p_load(tidyverse, 
+               janitor, 
+               gtsummary, 
+               sjPlot     # for regression plotting, 
+               )
+```
+
+```{r}
+covid <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+```
+
+```{r}
+head(covid)
+```
+
+Create a covid only for 2021
+
+```{r}
+covid <-  covid %>% 
+  filter(date > "2021-01-01")
+```
+
+```{r}
+covid %>% 
+  # Filter to the last available date
+  group_by(iso_code) %>% 
+  slice(which.max(as.Date(date, '%m/%d/%Y'))) %>% 
+  # ungroup() %>% 
+  # purrr::discard(~sum(is.na(.x))/length(.x)* 100 >=30) %>% 
+  # visdat::vis_dat()
+  filter(population > 1500000 & people_fully_vaccinated_per_hundred > 0) %>% 
+  ggplot(aes(x = people_fully_vaccinated_per_hundred, 
+             y = new_deaths_per_million)) + 
+  geom_point() 
+  
+```
+
+```{r}
+glimpse(covid)
+```
+
+model\
+as_flextable(m)

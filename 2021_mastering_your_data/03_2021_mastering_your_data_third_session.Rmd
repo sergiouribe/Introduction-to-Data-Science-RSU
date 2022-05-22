@@ -1,0 +1,170 @@
+---
+title: "Mastering your data"
+output: html_notebook
+---
+
+# Packages
+
+```{r}
+# install.packages("pacman")
+```
+
+And now I will install the packages that we will use
+
+```{r}
+pacman::p_load(tidyverse, # several datascience packages
+               palmerpenguins, # data
+               gapminder, #data,
+               gtsummary) # for tables) 
+```
+
+### Time
+
+See <https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations>
+
+## Recapitulation
+
+### One variable
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie") %>% 
+  ggplot(aes(x = flipper_length_mm)) + 
+  geom_histogram()
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie") %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram() 
+```
+
+Try adjusting the bins
+
+### Two variables: num vs num
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = bill_length_mm)) + 
+  geom_point()
+```
+
+### Two variable num vs categorical
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = bill_depth_mm)) + 
+  geom_boxplot()
+```
+
+Try with jitter
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = bill_depth_mm)) + 
+  geom_boxplot()
+```
+
+add color, size, shape
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm, 
+             color = species, 
+             size = body_mass_g, 
+             shape = island)) + 
+  geom_point()
+```
+
+# Third session
+
+```{r}
+head(penguins)
+```
+
+```{r}
+head(relig_income)
+```
+
+```{r}
+gapminder_wide <- read_csv("https://bit.ly/gapminder-rsu")
+```
+
+```{r}
+head(gapminder_wide)
+```
+
+```{r}
+glimpse(gapminder_wide)
+```
+
+How many countries?
+
+```{r}
+gapminder_wide %>% 
+  count(country)
+```
+
+```{r}
+n_distinct(gapminder_wide$country)
+```
+
+Count continents
+
+```{r}
+gapminder_wide %>% 
+  count(continent)
+```
+
+```{r}
+n_distinct(gapminder_wide$continent)
+```
+
+## Wide vs long formats
+
+### Let's look at the columns: how many variables?
+
+gdpPercap_1952:gdpPercap_2007
+
+pop_1952:pop_2007
+
+#### Wide to long: best for machines
+
+#### Long to wide: best for humans
+
+## Split-apply-combine
+
+![](https://camo.githubusercontent.com/e88a57d67827311f6015cae7f15557052ec44adf5924f83f6d90c62c66be191c/687474703a2f2f7777772e686f66726f652e6e65742f737461743537392f736c696465732f73706c69742d6170706c792d636f6d62696e652e706e67)
+
+### Question: how has GDP per continent evolved per year?
+
+```{r}
+gapminder %>% 
+  # split
+  group_by(continent, year) %>% 
+  # apply & combine
+  summarise(mean = mean(gdpPercap))
+```
+
+```{r}
+gapminder %>% 
+  # split
+  group_by(continent, year) %>% 
+  # apply & combine
+  summarise(mean = mean(gdpPercap)) %>% 
+  ggplot(aes(x = year, 
+             y = mean, 
+             color = continent)) + 
+  geom_line()
+```
+
+### Question: how has POPULATION per continent evolved per year?
+
+Select only the Baltic countries and explore their changes in gdp and population
+
+Homework: See [\<https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations>](https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations){.uri}

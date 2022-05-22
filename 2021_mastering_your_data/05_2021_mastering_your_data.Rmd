@@ -1,0 +1,618 @@
+---
+title: "R Notebook"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+# First Session
+
+**Understanding the data**
+
+To design an effective visualization with a clear purpose, you must thoroughly understand your data. The following points will help you find the information you want to convey with your data:
+
+-   What kind of data is it? Nominal, ordinal, interval or ratio data?
+
+-   How do the different parts of the data relate to each other?
+
+-   Can you organize the data in a way that makes it easy for you to create your visualizations?
+
+-   What do you want to communicate with your data?
+
+## The ggplot2 package
+
+The grammar of graphics (ggplot)
+
+To contruct a graph, we need
+
+-   data: a dataframe in tidyformat
+
+-   some mapping to include aesthetics elements
+
+-   a geometric representation of the aesthetics elements
+
+The ggplot allows to manage those elements and adding to your graph as layers
+
+First install pacman that will allow to install other packages
+
+```{r}
+# install.packages("pacman")
+```
+
+And now I will install the packages that we will use
+
+```{r}
+pacman::p_load(tidyverse, # several datascience packages
+               palmerpenguins, # data
+               gapminder, #data,
+               gtsummary) # for tables) 
+```
+
+We have everything ready
+
+```{r}
+head(penguins)
+```
+
+```{r}
+View(penguins)
+```
+
+## My first graph
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g, 
+             y = flipper_length_mm, 
+             color = species, 
+             shape = island)) +
+  geom_point()
+```
+
+```{r}
+covid_latvia <- read_csv("https://covid.ourworldindata.org/data/owid-covid-data.csv")
+```
+
+# Second session
+
+## Packages
+
+Run the first lines
+
+## Explore the dataset
+
+### Know your variables
+
+-   continuous: num or int
+-   categorical: fct or chr
+-   date/time
+
+### head
+
+### str & glimpse
+
+### summary
+
+Summary of all the dataset
+
+Summary of a specific variable (or vector in R vocabulary)
+
+species
+
+island
+
+flipper_length
+
+### dim
+
+Give the **dim**ensions of the dataset in rows and columns
+
+## Summary tables
+
+#### With tables
+
+By sex
+
+By sex and species
+
+by species and island
+
+#### With gtsummary
+
+all
+
+by sex
+
+by species
+
+by island
+
+only sex, species and body_mass_g (new: select)
+
+## Visualize the dataset
+
+### One variable
+
+#### continuous: num or int
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram()
+```
+
+by flipper_length
+
+only one specie (new: filter)
+
+#### categorical: fct or chr
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species)) + 
+  geom_bar()
+```
+
+By island
+
+### Two variables
+
+#### number vs categorical
+
+species vs body_mass_g
+
+#### categorical vs categorical
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = island, 
+             fill = species)) + 
+  geom_bar()
+```
+
+### Time
+
+See <https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations>
+
+## Second session last part, delete this header afterwards
+
+### One variable
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie") %>% 
+  ggplot(aes(x = flipper_length_mm)) + 
+  geom_histogram()
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie") %>% 
+  ggplot(aes(x = body_mass_g)) + 
+  geom_histogram() 
+```
+
+Try adjusting the bins
+
+### Two variables: num vs num
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = flipper_length_mm, 
+             y = bill_length_mm)) + 
+  geom_point()
+```
+
+### Two variable num vs categorical
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = bill_depth_mm)) + 
+  geom_boxplot()
+```
+
+Try with jitter
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = species, 
+             y = bill_depth_mm)) + 
+  geom_boxplot()
+```
+
+add color, size, shape
+
+```{r}
+penguins %>% 
+  ggplot(aes(x = bill_length_mm, 
+             y = bill_depth_mm, 
+             color = species, 
+             size = body_mass_g, 
+             shape = island)) + 
+  geom_point()
+```
+
+# Third session
+
+```{r}
+head(penguins)
+```
+
+```{r}
+head(relig_income)
+```
+
+```{r}
+gapminder_wide <- read_csv("https://bit.ly/gapminder-rsu")
+```
+
+```{r}
+head(gapminder_wide)
+```
+
+```{r}
+glimpse(gapminder_wide)
+```
+
+How many countries?
+
+```{r}
+gapminder_wide %>% 
+  count(country)
+```
+
+```{r}
+n_distinct(gapminder_wide$country)
+```
+
+Count continents
+
+```{r}
+gapminder_wide %>% 
+  count(continent)
+```
+
+```{r}
+n_distinct(gapminder_wide$continent)
+```
+
+## Wide vs long formats
+
+### Let's look at the columns: how many variables?
+
+gdpPercap_1952:gdpPercap_2007
+
+pop_1952:pop_2007
+
+# Fourth session
+
+compare gapminder wide vs long
+
+gapminder_wide \<- read_csv("[https://bit.ly/gapminder-rsu")](https://bit.ly/gapminder-rsu"))
+
+Load the packages
+
+```{r}
+pacman::p_load(tidyverse, # several datascience packages
+               palmerpenguins, # data
+               gapminder, #data,
+               gtsummary) # for tables) 
+```
+
+## Data basics
+
+#### Filtering
+
+![](https://d33wubrfki0l68.cloudfront.net/b58f5f2b6a73f15e90a3c6bf8db8ba67a1ca365b/020d8/images/cheatsheets/filter.png)
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie")
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie" & island == "Dream")
+```
+
+```{r}
+penguins %>% 
+  filter(body_mass_g < 3000)
+```
+
+You can use other operators beyond just the `==` operator that tests for equality:
+
+-   `>` corresponds to "greater than"
+
+-   `<` corresponds to "less than"
+
+-   `>=` corresponds to "greater than or equal to"
+
+-   `<=` corresponds to "less than or equal to"
+
+-   `!=` corresponds to "not equal to." The `!` is used in many programming languages to indicate "not."
+
+[`&`](https://rdrr.io/r/base/Logic.html) is "and", [`|`](https://rdrr.io/r/base/Logic.html) is "or", and [`!`](https://rdrr.io/r/base/Logic.html) is "not".
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie" &  island != "Torgersen")
+```
+
+```{r}
+penguins %>% 
+  filter(species == "Adelie" |  species == "Gentoo")
+```
+
+```{r}
+penguins %>% 
+  filter(species %in% c("Adelie", "Gentoo"))
+```
+
+TASK
+
+Filter all penguins from Torgersen weighing more than 3500g
+
+#### Mutate
+
+Create new variables
+
+Bill ratio = bill_length_mm / bill_depth_mm
+
+```{r}
+penguins %>% 
+  mutate(bill_ratio = bill_length_mm /  bill_depth_mm)
+```
+
+```{r}
+penguins %>% 
+  mutate(bill_ratio = bill_length_mm /  bill_depth_mm) %>% 
+  relocate(bill_ratio, .after = island)
+```
+
+TASK
+
+Convert the body_mass_g to k
+
+#### Grouping and summarizing data
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(mean_body_mass_g = mean(body_mass_g))
+```
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(mean_body_mass_g = mean(body_mass_g, na.rm = T))
+```
+
+Count
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  group_by(species) %>% 
+  summarise(mean_body_mass_g = mean(body_mass_g), 
+            max = max(body_mass_g), 
+            min = min(body_mass_g), 
+            sd = sd(body_mass_g), 
+            n = n())
+```
+
+```{r}
+penguins %>% 
+  drop_na() %>% 
+  group_by(species) %>% 
+  summarise(mean_body_mass_g = mean(body_mass_g), 
+            max = max(body_mass_g), 
+            min = min(body_mass_g), 
+            sd = sd(body_mass_g), 
+            n = n()) %>% 
+  knitr::kable()
+```
+
+TASK
+
+Create a summary table for the flipper_length_mm with the median, sd and maximum
+
+## Wide vs long format
+
+### Load data
+
+```{r}
+gap_wide <- read_csv("https://bit.ly/gapminder-rsu")
+```
+
+### Explore the data
+
+```{r}
+head(gap_wide)
+```
+
+```{r}
+names(gap_wide)
+```
+
+![](images/2021-11-25_13-05.png)
+
+```{r}
+gap_wide %>% 
+  filter(country == "China")
+```
+
+How to plot ?
+
+### Wide vs long
+
+![](https://tavareshugo.github.io/r-intro-tidyverse-gapminder/fig/07-data_shapes.png)
+
+-   Wide data is for humans
+
+-   Long data is for computers
+
+![](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
+
+#### Wide to long
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value")
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  ggplot(aes(x = gdp_year, 
+             y = gdp_value)) + 
+  geom_point()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # filter only China
+  filter(country == "China") %>% 
+  ggplot(aes(x = gdp_year, 
+             y = gdp_value)) + 
+  geom_point()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # filter only China
+  filter(country == "China") %>% 
+  ggplot(aes(x = gdp_year, 
+             y = gdp_value)) + 
+  geom_line()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # filter only China
+  filter(country == "China") %>% 
+  ggplot(aes(x = gdp_year, 
+             y = gdp_value, 
+             group = country)) + # here is the key
+  geom_line()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # separate the gdp from the year
+  separate(gdp_year, 
+           into = c("metric", "year")) %>% 
+  # filter only China
+  filter(country == "China") %>% 
+  ggplot(aes(x = year, 
+             y = gdp_value, 
+             group = country)) + # here is the key
+  geom_line()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # separate the gdp from the year
+  separate(gdp_year, 
+           into = c("metric", "year")) %>% 
+  # filter only Europe
+  filter(continent == 'Europe') %>% 
+  ggplot(aes(x = year, 
+             y = gdp_value, 
+             group = country)) + # here is the key
+  geom_line()
+```
+
+```{r}
+gap_wide %>% 
+  select(continent:gdpPercap_2007) %>% 
+  pivot_longer( cols = gdpPercap_1952:gdpPercap_2007, 
+                names_to = "gdp_year", 
+                values_to = "gdp_value") %>% 
+  # separate the gdp from the year
+  separate(gdp_year, 
+           into = c("metric", "year")) %>% 
+  # filter only Europe
+  filter(continent == 'Europe') %>% 
+  ggplot(aes(x = year, 
+             y = gdp_value,
+             color = country, 
+             group = country)) + # here is the key
+  geom_line()
+```
+
+## Split-apply-combine
+
+![](https://camo.githubusercontent.com/e88a57d67827311f6015cae7f15557052ec44adf5924f83f6d90c62c66be191c/687474703a2f2f7777772e686f66726f652e6e65742f737461743537392f736c696465732f73706c69742d6170706c792d636f6d62696e652e706e67)
+
+Now, we will use the long gapminder dataset
+
+### Question: how has GDP per continent evolved per year?
+
+```{r}
+gapminder %>% 
+  # split
+  group_by(continent, year) %>% 
+  # apply & combine
+  summarise(mean = mean(gdpPercap))
+```
+
+```{r}
+gapminder %>% 
+  # split
+  group_by(continent, year) %>% 
+  # apply & combine
+  summarise(mean = mean(gdpPercap)) %>% 
+  ggplot(aes(x = year, 
+             y = mean, 
+             color = continent)) + 
+  geom_line()
+```
+
+### Question: how has POPULATION per continent evolved per year?
+
+```{r}
+gapminder %>% 
+  # split
+  group_by(continent, year) %>% 
+  # apply & combine
+  summarise(mean = mean(pop)) %>% 
+  ggplot(aes(x = year, 
+             y = mean, 
+             color = continent)) + 
+  geom_line(
+```
+
+Try log10
+
+Homework: See [<https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations>](https://github.com/owid/covid-19-data/tree/master/public/data/vaccinations){.uri}
+
+# 
